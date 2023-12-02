@@ -1,5 +1,4 @@
 #pragma once
-#include <stdio.h>
 
 // Application definition
 #ifdef LH_PLATFORM_WINDOWS
@@ -9,7 +8,8 @@
 	#else
 		int main(int argc, char** argv)
 		{
-			printf("Hello World!");
+			Luha::Log::Init();
+			LH_CORE_INFO("Hello World");
 
 			return 0;
 		}

@@ -1,0 +1,3 @@
+[submodule "Luha/vendor/spdlog"]
+	path = Luha/vendor/spdlog
+	url = https://github.com/wooodiest/spdlog

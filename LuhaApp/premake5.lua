@@ -16,7 +16,10 @@ project "LuhaApp"
 	includedirs
     {
 		"src",
-		"%{wks.location}/Luha/src"
+		"%{wks.location}/Luha/src",
+		"%{wks.location}/Luha/vendor",
+		"%{wks.location}/Luha/vendor/spdlog/include"
+
 	}
 
 	links

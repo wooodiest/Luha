@@ -23,7 +23,8 @@ project "Luha"
 
 	includedirs
     {
-		"src"
+		"src",
+		"vendor/spdlog/include"
 	}
 
 	filter "system:windows"
