@@ -46,7 +46,7 @@ namespace Luha {
 	#define LH_ERROR(...)         
 	#define LH_CRITICAL(...)      
 
-#elif LH_LOG_TO_CONSOLE == 0 && LH_LOG_TO_FILE == 0
+#elif (LH_LOG_TO_CONSOLE == 0 && LH_LOG_TO_FILE == 0)
 	// Core log macros
 	#define LH_CORE_TRACE(...)    
 	#define LH_CORE_INFO(...)     

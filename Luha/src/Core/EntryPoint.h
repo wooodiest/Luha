@@ -10,7 +10,6 @@
 		{
 			Luha::Log::Init();
 			LH_CORE_INFO("Hello World");
-
 			return 0;
 		}
 	#endif
