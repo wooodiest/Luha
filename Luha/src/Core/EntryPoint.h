@@ -1,9 +1,20 @@
 #pragma once
 #include <stdio.h>
 
-int main(int argc, char** argv)
-{
-	printf("Hello World!");
+// Application definition
+#ifdef LH_PLATFORM_WINDOWS
 
-	return 0;
-}
+	#if defined(LH_DIST) && LH_CONSOLE_IN_DISTRIBUTION_BUILD
+
+	#else
+		int main(int argc, char** argv)
+		{
+			printf("Hello World!");
+
+			return 0;
+		}
+	#endif
+
+
+#endif // LH_PLATFORM_WINDOWS
+
