@@ -24,11 +24,22 @@ project "Luha"
 	includedirs
     {
 		"src",
-		"vendor/spdlog/include"
+		"vendor/spdlog/include",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
+	}
+
+	links 
+	{
+		"GLFW",
+		"Glad",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
         systemversion "latest"
+		defines
+        { "GLFW_INCLUDE_NONE" }
 
 		filter "configurations:Debug"
 		defines "LH_DEBUG"

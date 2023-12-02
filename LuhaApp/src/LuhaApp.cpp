@@ -1,2 +1,20 @@
 #include "Luha.h"
 #include "Core/EntryPoint.h"
+
+Luha::Application* Luha::CreateApplication(int argc, char** argv)
+{
+	Luha::ApplicationSpecification spec;
+	spec.Name              = "Luha Application";
+	spec.Window_Width      = 1600;
+	spec.Window_Height     = 900;
+	spec.Window_Min_Width  = 0;
+	spec.Window_Min_Height = 0;
+	spec.Window_Max_Width  = 0;
+	spec.Window_Max_Height = 0;
+	spec.VSync             = true;
+	spec.Window_Resizeable = true;
+
+	Luha::Application* app = new Luha::Application(spec);
+
+	return app;
+}
