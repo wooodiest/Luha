@@ -9,6 +9,8 @@ namespace Luha {
 
 	Application::Application(const ApplicationSpecification& spec)
 	{
+		LH_PROFILE_FUNCTION();
+
 		Log::Init();
 
 		s_Instance = this;
@@ -19,13 +21,19 @@ namespace Luha {
 
 	Application::~Application()
 	{
+		LH_PROFILE_FUNCTION();
+
 		Close();
 	}
 
 	void Application::Run()
 	{
+		LH_PROFILE_FUNCTION();
+
 		while (m_Running)
 		{
+			LH_PROFILE_SCOPE("RunLoop");
+
 			if (!m_Minimized)
 			{
 				glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -38,7 +46,7 @@ namespace Luha {
 
 	void Application::Close()
 	{
-		
+		LH_PROFILE_FUNCTION();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -57,6 +65,8 @@ namespace Luha {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		LH_PROFILE_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

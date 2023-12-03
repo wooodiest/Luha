@@ -12,3 +12,7 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "Core/ApplicationSettings.h"
+#include "Core/Log.h"
+#include "Debug/Instrumentor.h"

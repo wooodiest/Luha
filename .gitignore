@@ -15,3 +15,7 @@ x64/
 **.vcxproj.user
 **.csproj
 *.log
+
+Luha-Profile-Runtime.json
+Luha-Profile-Shutdown.json
+Luha-Profile-Startup.json

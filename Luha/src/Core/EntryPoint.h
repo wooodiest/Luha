@@ -6,10 +6,18 @@ namespace Luha {
 
 	int Main(int argc, char** argv)
 	{
-		Luha::Application* app = Luha::CreateApplication(argc, argv);
-		app->Run();
-		delete app;
-		
+		LH_PROFILE_BEGIN_SESSION("Startup", "Luha-Profile-Startup.json");
+			Luha::Application* app = Luha::CreateApplication(argc, argv);
+		LH_PROFILE_END_SESSION();
+
+		LH_PROFILE_BEGIN_SESSION("Runtime", "Luha-Profile-Runtime.json");
+			app->Run();
+		LH_PROFILE_END_SESSION();
+
+		LH_PROFILE_BEGIN_SESSION("Shutdown", "Luha-Profile-Shutdown.json");
+			delete app;
+		LH_PROFILE_END_SESSION();
+
 		return 0;
 	}
 

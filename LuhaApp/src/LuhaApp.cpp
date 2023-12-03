@@ -7,8 +7,8 @@ Luha::Application* Luha::CreateApplication(int argc, char** argv)
 	spec.Name              = "Luha Application";
 	spec.Window_Width      = 1600;
 	spec.Window_Height     = 900;
-	spec.Window_Min_Width  = 0;
-	spec.Window_Min_Height = 0;
+	spec.Window_Min_Width  = 1280;
+	spec.Window_Min_Height = 720;
 	spec.Window_Max_Width  = 0;
 	spec.Window_Max_Height = 0;
 	spec.VSync             = true;

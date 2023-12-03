@@ -10,10 +10,10 @@
 
 */
 
-#include "Base.h"
-
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
+
+#include "Core/ApplicationSettings.h"
 
 namespace Luha {
 
