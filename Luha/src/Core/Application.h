@@ -37,6 +37,7 @@ namespace Luha {
 		void PushLayer(Layer* layer);
 
 		inline static Application& Get() { return *s_Instance; }
+		inline Window& GetWindow() { return *m_Window; }
 		float GetTime() const;
 
 	private:

@@ -21,6 +21,8 @@ namespace Luha {
 		void OnUpdate();
 		void Shutdown();
 
+		GLFWwindow* GetNativeWindow() { return m_Window; }
+
 	private:
 		uint32_t GetWidth() const { return m_Data.Width; }
 		uint32_t GetHeight() const { return m_Data.Height; }
