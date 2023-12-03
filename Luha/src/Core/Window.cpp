@@ -192,6 +192,11 @@ namespace Luha {
 		glfwTerminate();
 	}
 
+	bool Window::IsMaximized() const
+	{
+		return (bool)glfwGetWindowAttrib(m_Window, GLFW_MAXIMIZED);
+	}
+
 	void Window::OnUpdate()
 	{
 		glfwPollEvents();

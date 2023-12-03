@@ -1,5 +1,7 @@
 #include "ExampleLayer.h"
 
+#include "imgui/imgui.h"
+
 namespace ExampleApp {
 
 	ExampleLayer::ExampleLayer()
@@ -37,6 +39,20 @@ namespace ExampleApp {
 	void ExampleLayer::OnImGuiRender()
 	{
 		LH_PROFILE_FUNCTION();
+
+		ImGui::ShowDemoWindow();
+	}
+
+	void ExampleLayer::OnMainMenuRender()
+	{
+		LH_PROFILE_FUNCTION();
+
+		if (ImGui::BeginMenu("Example"))
+		{
+			ImGui::Text("JD2000");
+
+			ImGui::EndMenu();
+		}
 	}
 
 	void ExampleLayer::OnEvent(Luha::Event& event)

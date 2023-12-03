@@ -14,6 +14,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 group "Dependencies"
 	include "Luha/vendor/GLFW"
 	include "Luha/vendor/Glad"
+    include "Luha/vendor/imgui"
 group ""
 
 include "Luha"

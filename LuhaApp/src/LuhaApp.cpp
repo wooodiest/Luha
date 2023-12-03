@@ -15,6 +15,7 @@ Luha::Application* Luha::CreateApplication(int argc, char** argv)
 	spec.Window_Max_Height = 0;
 	spec.VSync             = true;
 	spec.Window_Resizeable = true;
+	spec.MenuBar           = true;
 
 	Luha::Application* app = new Luha::Application(spec);
 	app->PushLayer(new ExampleApp::ExampleLayer());

@@ -23,6 +23,7 @@ namespace Luha {
 		uint32_t Window_Max_Height = 0;
 		bool     Window_Resizeable = true;
 		bool     VSync             = true;
+		bool     MenuBar           = true;
 
 	};
 	
@@ -44,6 +45,7 @@ namespace Luha {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		ApplicationSpecification m_ApplicationSpecification;
 		Scope<Window> m_Window;
 		LayerStack m_LayerStack;
 
@@ -51,6 +53,16 @@ namespace Luha {
 		bool m_Running = true;
 		bool m_Minimized = false;
 		float m_LastFrameTime = 0.0f;
+
+	private:
+		void InitImGui();
+		void ShutdownImGui();
+		void BeginImGuiFrame();
+		void EndImGuiFrame();
+		void BeginImGuiMainDockingWindow();
+		void EndImGuiMainDockingWindow();
+
+		void OnApplicationMainMenuRender();
 
 	private:
 		static Application* s_Instance;

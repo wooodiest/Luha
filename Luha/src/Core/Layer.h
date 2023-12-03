@@ -16,6 +16,7 @@ namespace Luha {
 		virtual void OnDetach() {}
 		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
+		virtual void OnMainMenuRender() {}
 		virtual void OnEvent(Event& event) {}
 
 	};

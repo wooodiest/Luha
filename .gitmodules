@@ -7,3 +7,7 @@
 [submodule "Luha/vendor/glm"]
 	path = Luha/vendor/glm
 	url = https://github.com/wooodiest/glm
+[submodule "Luha/vendor/imgui"]
+	path = Luha/vendor/imgui
+	url = https://github.com/wooodiest/imgui.git
+	branch = docking
