@@ -1,6 +1,8 @@
 #include "Luha.h"
 #include "Core/EntryPoint.h"
 
+#include "ExampleLayer.h"
+
 Luha::Application* Luha::CreateApplication(int argc, char** argv)
 {
 	Luha::ApplicationSpecification spec;
@@ -15,6 +17,7 @@ Luha::Application* Luha::CreateApplication(int argc, char** argv)
 	spec.Window_Resizeable = true;
 
 	Luha::Application* app = new Luha::Application(spec);
+	app->PushLayer(new ExampleApp::ExampleLayer());
 
 	return app;
 }

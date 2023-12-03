@@ -5,6 +5,8 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 
+#include "LayerStack.h"
+
 #include "Window.h"
 
 namespace Luha {
@@ -32,6 +34,7 @@ namespace Luha {
 		void Run();
 		void Close();
 		void OnEvent(Event& e);
+		void PushLayer(Layer* layer);
 
 		inline static Application& Get() { return *s_Instance; }
 		float GetTime() const;
@@ -40,6 +43,7 @@ namespace Luha {
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		Scope<Window> m_Window;
+		LayerStack m_LayerStack;
 
 		bool m_Running = true;
 		bool m_Minimized = false;

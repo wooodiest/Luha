@@ -37,19 +37,24 @@ namespace Luha {
 		{
 			LH_PROFILE_SCOPE("RunLoop");
 
+			// Renderer commands
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			// Calculate delta time
+			float time = GetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			if (!m_Minimized)
 			{
-				// Renderer commands
-				glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-				glClear(GL_COLOR_BUFFER_BIT);
+				LH_PROFILE_SCOPE("LayerStack OnUpdate()");
 
-				// Calculate delta time
-				float time = GetTime();
-				Timestep timestep = time - m_LastFrameTime;
-				m_LastFrameTime = time;
-
-				
-
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnUpdate(timestep);
+					layer->OnImGuiRender();
+				}
 			}
 			m_Window->OnUpdate();
 		}
@@ -66,6 +71,19 @@ namespace Luha {
 		dispatcher.Dispatch<WindowCloseEvent>(LH_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(LH_BIND_EVENT_FN(Application::OnWindowResize));
 
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+		{
+			(*it)->OnEvent(e);
+			if (e.Handled)
+				break;
+		}
+
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	float Application::GetTime() const
