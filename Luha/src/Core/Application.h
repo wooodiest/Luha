@@ -34,6 +34,7 @@ namespace Luha {
 		void OnEvent(Event& e);
 
 		inline static Application& Get() { return *s_Instance; }
+		float GetTime() const;
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -42,6 +43,7 @@ namespace Luha {
 
 		bool m_Running = true;
 		bool m_Minimized = false;
+		float m_LastFrameTime = 0.0f;
 
 	private:
 		static Application* s_Instance;

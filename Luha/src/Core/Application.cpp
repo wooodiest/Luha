@@ -2,6 +2,9 @@
 #include "Application.h"
 
 #include "glad/glad.h"
+#include "GLFW/glfw3.h"
+
+#include "Timestep.h"
 
 namespace Luha {
 
@@ -36,8 +39,16 @@ namespace Luha {
 
 			if (!m_Minimized)
 			{
+				// Renderer commands
 				glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT);
+
+				// Calculate delta time
+				float time = GetTime();
+				Timestep timestep = time - m_LastFrameTime;
+				m_LastFrameTime = time;
+
+				
 
 			}
 			m_Window->OnUpdate();
@@ -55,6 +66,11 @@ namespace Luha {
 		dispatcher.Dispatch<WindowCloseEvent>(LH_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(LH_BIND_EVENT_FN(Application::OnWindowResize));
 
+	}
+
+	float Application::GetTime() const
+	{
+		return (float)glfwGetTime();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
