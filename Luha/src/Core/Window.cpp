@@ -201,6 +201,7 @@ namespace Luha {
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+		m_FrameCount++;
 	}
 
 	void Window::SetEventCallback(const EventCallbackFn& callback)

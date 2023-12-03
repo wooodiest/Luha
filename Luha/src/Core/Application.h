@@ -41,6 +41,7 @@ namespace Luha {
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 		float GetTime() const;
+		Timestep GetDeltaTime() const;
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -53,6 +54,7 @@ namespace Luha {
 		bool m_Running = true;
 		bool m_Minimized = false;
 		float m_LastFrameTime = 0.0f;
+		Timestep m_DeltaTime = 0.0f;
 
 	private:
 		void InitImGui();

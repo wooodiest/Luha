@@ -7,6 +7,7 @@
 #include "GLFW/glfw3.h"
 
 #include "imgui.h"
+#include "implot.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
@@ -49,7 +50,7 @@ namespace Luha {
 
 			// Calculate delta time
 			float time = GetTime();
-			Timestep timestep = time - m_LastFrameTime;
+			m_DeltaTime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			// Application
@@ -61,7 +62,7 @@ namespace Luha {
 					LH_PROFILE_SCOPE("Layer stack OnUpdate()");
 
 					for (Layer* layer : m_LayerStack)
-						layer->OnUpdate(timestep);
+						layer->OnUpdate(m_DeltaTime);
 				}
 				
 				// Main menu
@@ -130,6 +131,11 @@ namespace Luha {
 		return (float)glfwGetTime();
 	}
 
+	Timestep Application::GetDeltaTime() const
+	{
+		return m_DeltaTime;
+	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
@@ -180,6 +186,8 @@ namespace Luha {
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
+
+		ImPlot::CreateContext();
 	}
 
 	void Application::ShutdownImGui()
@@ -188,6 +196,7 @@ namespace Luha {
 
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
+		ImPlot::DestroyContext();
 		ImGui::DestroyContext();
 	}
 

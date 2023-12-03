@@ -1,6 +1,7 @@
 #include "ExampleLayer.h"
 
-#include "imgui/imgui.h"
+#include "imgui.h"
+#include "implot.h"
 
 namespace ExampleApp {
 
@@ -41,6 +42,15 @@ namespace ExampleApp {
 		LH_PROFILE_FUNCTION();
 
 		ImGui::ShowDemoWindow();
+		ImPlot::ShowDemoWindow();
+
+		ImGui::Begin("Example Window");
+		ImGui::Text("Ala ma kota");
+		ImGui::Text("App is live for %fs", Luha::Application::Get().GetTime());
+		ImGui::Text("Delta time: %.1fms", Luha::Application::Get().GetDeltaTime().GetMilliseconds());
+		ImGui::Text("Total frames: %d", Luha::Application::Get().GetWindow().GetFrameCount());
+		ImGui::End();
+
 	}
 
 	void ExampleLayer::OnMainMenuRender()

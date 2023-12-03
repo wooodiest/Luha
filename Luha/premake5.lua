@@ -15,7 +15,8 @@ project "Luha"
         "src/**.h",
 		"src/**.cpp",
 		"vendor/glm/glm/**.hpp",
-		"vendor/glm/glm/**.inl"
+		"vendor/glm/glm/**.inl",
+		"vendor/implot/**.h"
 	}
 
 	defines
@@ -30,7 +31,8 @@ project "Luha"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImPlot}"
 	}
 
 	links 

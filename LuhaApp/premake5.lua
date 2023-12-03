@@ -20,7 +20,8 @@ project "LuhaApp"
 		"%{wks.location}/Luha/vendor",
 		"%{wks.location}/Luha/vendor/spdlog/include",
 		"%{IncludeDir.glm}",
-
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImPlot}"
 	}
 
 	links

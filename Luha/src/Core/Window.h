@@ -33,6 +33,7 @@ namespace Luha {
 
 		uint32_t GetWidth() const { return m_Data.Width; }
 		uint32_t GetHeight() const { return m_Data.Height; }
+		uint32_t GetFrameCount() const { return m_FrameCount; }
 		bool IsMaximized() const;
 
 		GLFWwindow* GetNativeWindow() { return m_Window; }
@@ -43,8 +44,7 @@ namespace Luha {
 
 	private:
 		GLFWwindow* m_Window;
-
-		
+		uint32_t m_FrameCount = 0;
 		WindowData m_Data; 
 		bool m_Resizeable;
 	};
