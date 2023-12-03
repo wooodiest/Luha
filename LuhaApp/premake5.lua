@@ -18,7 +18,8 @@ project "LuhaApp"
 		"src",
 		"%{wks.location}/Luha/src",
 		"%{wks.location}/Luha/vendor",
-		"%{wks.location}/Luha/vendor/spdlog/include"
+		"%{wks.location}/Luha/vendor/spdlog/include",
+		"%{IncludeDir.glm}",
 
 	}
 

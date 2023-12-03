@@ -1,10 +1,12 @@
 #pragma once
 
 // Includes 
-#include "PlatformDetection.h"
-#include "Log.h"
-#include "Assert.h"
+#include "Core/PlatformDetection.h"
+#include "Core/Log.h"
+#include "Core/Assert.h"
+
 #include "Debug/Instrumentor.h"
+
 #include <memory>
 
 // Useful defines

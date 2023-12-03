@@ -1,8 +1,9 @@
 #include "lhpch.h"
-#include "Input.h"
+
+#include "Core/Input.h"
+#include "Core/Application.h"
 
 #include "GLFW/glfw3.h"
-#include "Application.h"
 
 namespace Luha {
 

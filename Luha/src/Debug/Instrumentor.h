@@ -1,5 +1,15 @@
 #pragma once
 
+/* Client instrumentor macros
+
+	LH_PROFILE_BEGIN_SESSION(name, filepath)
+	LH_PROFILE_END_SESSION()
+
+	LH_PROFILE_SCOPE(name)
+	LH_PROFILE_FUNCTION()
+
+*/
+	
 #include <algorithm>
 #include <chrono>
 #include <fstream>

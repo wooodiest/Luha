@@ -1,10 +1,10 @@
 #include "lhpch.h"
-#include "Application.h"
+
+#include "Core/Application.h"
+#include "Core/Timestep.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-
-#include "Timestep.h"
 
 namespace Luha {
 
@@ -38,7 +38,7 @@ namespace Luha {
 			LH_PROFILE_SCOPE("RunLoop");
 
 			// Renderer commands
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClearColor(m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// Calculate delta time
@@ -46,6 +46,7 @@ namespace Luha {
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
+			// Application
 			if (!m_Minimized)
 			{
 				LH_PROFILE_SCOPE("LayerStack OnUpdate()");

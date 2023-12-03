@@ -5,9 +5,10 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 
-#include "LayerStack.h"
+#include "Core/LayerStack.h"
+#include "Core/Window.h"
 
-#include "Window.h"
+#include "glm/glm.hpp"
 
 namespace Luha {
 
@@ -46,6 +47,7 @@ namespace Luha {
 		Scope<Window> m_Window;
 		LayerStack m_LayerStack;
 
+		glm::vec4 m_ClearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
 		bool m_Running = true;
 		bool m_Minimized = false;
 		float m_LastFrameTime = 0.0f;
