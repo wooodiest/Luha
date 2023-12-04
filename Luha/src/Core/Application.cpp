@@ -11,6 +11,8 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
+#include "Utils/Random.h"
+
 namespace Luha {
 
 	Application* Application::s_Instance = nullptr;
@@ -27,6 +29,7 @@ namespace Luha {
 		m_Window->SetEventCallback(LH_BIND_EVENT_FN(Application::OnEvent));
 
 		InitImGui();
+		Random::Init();
 	}
 
 	Application::~Application()

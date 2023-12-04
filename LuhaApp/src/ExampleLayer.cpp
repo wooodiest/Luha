@@ -30,7 +30,7 @@ namespace ExampleApp {
 		LH_PROFILE_FUNCTION();
 
 		if (Luha::Input::IsKeyPressed(Luha::KeyCode::A))
-			LH_INFO("Key A is pressed!");
+			LH_INFO("Key A is pressed, random number: {0}", Luha::Random::Int());
 
 		if (Luha::Input::IsMouseButtonPressed(Luha::MouseCode::ButtonLeft))
 			LH_INFO("Left mouse button is clicked: ({0}, {1})", Luha::Input::GetMousePositionX(), Luha::Input::GetMousePositionY());
