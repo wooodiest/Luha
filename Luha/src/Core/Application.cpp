@@ -2,6 +2,7 @@
 
 #include "Core/Application.h"
 #include "Core/Timestep.h"
+#include "Utils/Time.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -52,8 +53,9 @@ namespace Luha {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// Calculate delta time
-			float time = GetTime();
+			Timestep time = GetTime();
 			m_DeltaTime = time - m_LastFrameTime;
+			m_DeltaTime = m_DeltaTime > 0.016f ? 0.016f : m_DeltaTime;
 			m_LastFrameTime = time;
 
 			// Application

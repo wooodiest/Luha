@@ -53,7 +53,7 @@ namespace Luha {
 		glm::vec4 m_ClearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
 		bool m_Running = true;
 		bool m_Minimized = false;
-		float m_LastFrameTime = 0.0f;
+		Timestep m_LastFrameTime = 0.0f;
 		Timestep m_DeltaTime = 0.0f;
 
 	private:
