@@ -19,13 +19,17 @@ namespace Luha {
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application(const ApplicationSpecification& spec)
-		: m_ApplicationSpecification(spec)
 	{
 		LH_PROFILE_FUNCTION();
 
 		Log::Init();
 
 		s_Instance = this;
+
+		// try load spec from file
+		// else 
+		m_ApplicationSpecification = spec;
+
 		m_Window = CreateScope<Window>(spec);
 		m_Window->SetEventCallback(LH_BIND_EVENT_FN(Application::OnEvent));
 
@@ -157,6 +161,8 @@ namespace Luha {
 			return false;
 		}
 		m_Minimized = false;
+		m_ApplicationSpecification.Window_Height = e.GetHeight();
+		m_ApplicationSpecification.Window_Width = e.GetWidth();
 		return false;
 	}
 
@@ -176,8 +182,7 @@ namespace Luha {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
+		SetImGuiTheme();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -273,21 +278,63 @@ namespace Luha {
 		ImGui::End();
 	}
 
+	void Application::SetImGuiTheme()
+	{
+		switch (m_ApplicationSpecification.ColorThema)
+		{
+			case ImGuiColorTheme::Dark: ImGui::StyleColorsDark(); break;
+			case ImGuiColorTheme::Classic: ImGui::StyleColorsClassic(); break;
+			case ImGuiColorTheme::Light: ImGui::StyleColorsLight(); break;
+			default: ImGui::StyleColorsDark(); break;
+		}
+	}
+
 	void Application::OnApplicationMainMenuRender()
 	{
-		if(ImGui::BeginMenu("Window"))
+		if(ImGui::BeginMenu("Application"))
 		{
+			// Save
+			if (ImGui::MenuItem("Save", "Ctrl+S"))
+			{
+				//TODO
+			}
+
+			// Color theme
+			if (ImGui::BeginMenu("Color theme"))
+			{
+				int selected = static_cast<int>(m_ApplicationSpecification.ColorThema);
+
+				if (ImGui::Selectable("Dark", selected == 1))
+				{
+					selected = 1;
+					m_ApplicationSpecification.ColorThema = static_cast<ImGuiColorTheme>(selected);
+					SetImGuiTheme();
+				}
+				if (ImGui::Selectable("Classic", selected == 2))
+				{
+					selected = 2;
+					m_ApplicationSpecification.ColorThema = static_cast<ImGuiColorTheme>(selected);
+					SetImGuiTheme();
+				}
+				if (ImGui::Selectable("Light", selected == 3))
+				{
+					selected = 3;
+					m_ApplicationSpecification.ColorThema = static_cast<ImGuiColorTheme>(selected);
+					SetImGuiTheme();
+				}
+				ImGui::EndMenu();
+			}
+
 			// Vsync
-			ImGui::SeparatorText("  Window  ");
 			bool vsync = GetWindow().IsVSync();
-			if(ImGui::Checkbox("Vsync", &vsync))
+			if(ImGui::MenuItem("Vsync", "", &vsync))
 			{
 				GetWindow().SetVSync(vsync);
 			}
 
-			ImGui::SeparatorText("  Application  ");
+			ImGui::Separator();
 			// Close
-			if (ImGui::Button("Close"))
+			if (ImGui::MenuItem("Close"))
 			{
 				m_Running = false;
 			}

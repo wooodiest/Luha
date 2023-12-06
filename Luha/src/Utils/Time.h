@@ -47,7 +47,10 @@ namespace Luha {
 			: m_Time(ts), m_Callback([=]() { callback(std::forward<Args>(args)...); })
 		{
 			if (callOnStartUp)
+			{
 				m_Callback();
+				m_CallCount++;
+			}
 		}
 		~RepeatClock() = default;
 

@@ -36,13 +36,8 @@ namespace ExampleApp {
 		if (Luha::Input::IsMouseButtonPressed(Luha::MouseCode::ButtonRight))
 			LH_INFO("Left mouse button is clicked: ({0}, {1})", Luha::Input::GetMousePositionX(), Luha::Input::GetMousePositionY());
 	
-		static Luha::Timestep time = 0.0f; 
-		static auto clock1 = Luha::Clock(Luha::Timestep(5.0f), []() { LH_INFO("It's been ~ 5s: {0}s", (float)time); });
-		clock1.OnUpdate(); 
-		time += ts;
-
-		static auto clock2 = Luha::RepeatClock(Luha::Timestep(3.0f), false, []() { LH_INFO("Hi"); });
-		clock2.OnUpdate();
+		static auto clock = Luha::RepeatClock(Luha::Timestep(3.0f), false, []() { LH_INFO("Hi"); });
+		clock.OnUpdate();
 	}
 
 	void ExampleLayer::OnImGuiRender()
@@ -77,7 +72,7 @@ namespace ExampleApp {
 	{
 		if (event.GetEventType() == Luha::EventType::WindowResize)
 		{
-			Luha::ScopedTimer("Window resized", Luha::TimeUnit::ms);
+			Luha::ScopedTimer timer("Window resized", Luha::TimeUnit::ms);
 
 			auto ev = (Luha::WindowResizeEvent&)event;
 			LH_INFO("Window Resized: ({0}, {1})", ev.GetWidth(), ev.GetHeight());

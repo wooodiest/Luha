@@ -12,6 +12,11 @@
 
 namespace Luha {
 
+	enum class ImGuiColorTheme
+	{
+		Dark = 1, Classic, Light
+	};
+
 	struct ApplicationSpecification
 	{
 		char*    Name              = "Luha App";
@@ -24,6 +29,7 @@ namespace Luha {
 		bool     Window_Resizeable = true;
 		bool     VSync             = true;
 		bool     MenuBar           = true;
+		ImGuiColorTheme ColorThema = ImGuiColorTheme::Dark;
 
 	};
 	
@@ -63,6 +69,7 @@ namespace Luha {
 		void EndImGuiFrame();
 		void BeginImGuiMainDockingWindow();
 		void EndImGuiMainDockingWindow();
+		void SetImGuiTheme();
 
 		void OnApplicationMainMenuRender();
 
