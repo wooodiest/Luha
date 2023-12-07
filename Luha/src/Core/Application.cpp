@@ -7,7 +7,6 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "imgui.h"
 #include "implot.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -34,7 +33,7 @@ namespace Luha {
 		m_Window->SetEventCallback(LH_BIND_EVENT_FN(Application::OnEvent));
 
 		InitImGui();
-		Random::Init();
+		Random::Init();;
 	}
 
 	Application::~Application()
@@ -62,44 +61,53 @@ namespace Luha {
 			m_DeltaTime = m_DeltaTime > 0.016f ? 0.016f : m_DeltaTime;
 			m_LastFrameTime = time;
 
-			// Application
-			BeginImGuiFrame();
-			if (!m_Minimized)
+			// -> Application
+			// Layer stack OnUpdate
 			{
-				// Layer stack OnUpdate
+				LH_PROFILE_SCOPE("Layer stack OnUpdate()");
+				#ifdef LH_UPDATE_ON_MINIMIZED
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(m_DeltaTime);
+				#else
+				if (!m_Minimized)
 				{
-					LH_PROFILE_SCOPE("Layer stack OnUpdate()");
-
 					for (Layer* layer : m_LayerStack)
 						layer->OnUpdate(m_DeltaTime);
 				}
-				
-				// Main menu
+				#endif					
+			}
+
+			if (m_FontChanged)
+				LoadFont();
+
+			BeginImGuiFrame();
+			ImGui::PushFont(m_Font);
+			// Main menu
+			{
+				LH_PROFILE_SCOPE("Main menu render");
+
+				if (m_ApplicationSpecification.MenuBar && ImGui::BeginMainMenuBar())
 				{
-					LH_PROFILE_SCOPE("Main menu render");
-
-					if (m_ApplicationSpecification.MenuBar && ImGui::BeginMainMenuBar())
-					{
-						OnApplicationMainMenuRender();
-
-						for (Layer* layer : m_LayerStack)
-							layer->OnMainMenuRender();
-
-						ImGui::EndMainMenuBar();
-					}
-				}
-				// Layer stack OnImGuiRender
-				{
-					LH_PROFILE_SCOPE("Layer stack OnImGuiRender");
-
-					BeginImGuiMainDockingWindow();
+					OnApplicationMainMenuRender();
 
 					for (Layer* layer : m_LayerStack)
-						layer->OnImGuiRender();
+						layer->OnMainMenuRender();
 
-					EndImGuiMainDockingWindow();
+					ImGui::EndMainMenuBar();
 				}
 			}
+			// Layer stack OnImGuiRender
+			{
+				LH_PROFILE_SCOPE("Layer stack OnImGuiRender");
+
+				BeginImGuiMainDockingWindow();
+
+				for (Layer* layer : m_LayerStack)
+					layer->OnImGuiRender();
+
+				EndImGuiMainDockingWindow();
+			}
+			ImGui::PopFont();
 			EndImGuiFrame();
 
 			m_Window->OnUpdate();
@@ -197,6 +205,9 @@ namespace Luha {
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 
+		io.Fonts->AddFontDefault();
+		LoadFont();
+		
 		ImPlot::CreateContext();
 	}
 
@@ -282,9 +293,9 @@ namespace Luha {
 	{
 		switch (m_ApplicationSpecification.ColorThema)
 		{
-			case ImGuiColorTheme::Dark: ImGui::StyleColorsDark(); break;
-			case ImGuiColorTheme::Classic: ImGui::StyleColorsClassic(); break;
-			case ImGuiColorTheme::Light: ImGui::StyleColorsLight(); break;
+			case AppColorTheme::Dark: ImGui::StyleColorsDark(); break;
+			case AppColorTheme::Classic: ImGui::StyleColorsClassic(); break;
+			case AppColorTheme::Light: ImGui::StyleColorsLight(); break;
 			default: ImGui::StyleColorsDark(); break;
 		}
 	}
@@ -299,6 +310,17 @@ namespace Luha {
 				//TODO
 			}
 
+			ImGui::Separator();
+
+			// Vsync
+			bool vsync = GetWindow().IsVSync();
+			if (ImGui::MenuItem("Vsync", "", &vsync))
+			{
+				GetWindow().SetVSync(vsync);
+			}
+
+			ImGui::Separator();
+
 			// Color theme
 			if (ImGui::BeginMenu("Color theme"))
 			{
@@ -307,34 +329,64 @@ namespace Luha {
 				if (ImGui::Selectable("Dark", selected == 1))
 				{
 					selected = 1;
-					m_ApplicationSpecification.ColorThema = static_cast<ImGuiColorTheme>(selected);
+					m_ApplicationSpecification.ColorThema = static_cast<AppColorTheme>(selected);
 					SetImGuiTheme();
 				}
 				if (ImGui::Selectable("Classic", selected == 2))
 				{
 					selected = 2;
-					m_ApplicationSpecification.ColorThema = static_cast<ImGuiColorTheme>(selected);
+					m_ApplicationSpecification.ColorThema = static_cast<AppColorTheme>(selected);
 					SetImGuiTheme();
 				}
 				if (ImGui::Selectable("Light", selected == 3))
 				{
 					selected = 3;
-					m_ApplicationSpecification.ColorThema = static_cast<ImGuiColorTheme>(selected);
+					m_ApplicationSpecification.ColorThema = static_cast<AppColorTheme>(selected);
 					SetImGuiTheme();
 				}
 				ImGui::EndMenu();
 			}
 
-			// Vsync
-			bool vsync = GetWindow().IsVSync();
-			if(ImGui::MenuItem("Vsync", "", &vsync))
+			// Font
+			if (ImGui::BeginMenu("Font"))
 			{
-				GetWindow().SetVSync(vsync);
+				if (ImGui::DragFloat(" Font size ", &m_ApplicationSpecification.FontSize, 0.5f, 9.0f, 50.0f, "%.1f", ImGuiSliderFlags_AlwaysClamp))
+				{
+					m_FontChanged = true;
+				}
+
+				ImGui::Separator();
+				int selected = static_cast<int>(m_ApplicationSpecification.Font);
+				if (ImGui::Selectable("Roboto", selected == 1))
+				{
+					selected = 1;
+					m_ApplicationSpecification.Font = static_cast<AppFont>(selected);
+					m_FontChanged = true;
+				}
+				if (ImGui::Selectable("OpenSans", selected == 2))
+				{
+					selected = 2;
+					m_ApplicationSpecification.Font = static_cast<AppFont>(selected);
+					m_FontChanged = true;
+				}
+				if (ImGui::Selectable("Oswald", selected == 3))
+				{
+					selected = 3;
+					m_ApplicationSpecification.Font = static_cast<AppFont>(selected);
+					m_FontChanged = true;
+				}
+				if (ImGui::Selectable("Montserrat", selected == 4))
+				{
+					selected = 4;
+					m_ApplicationSpecification.Font = static_cast<AppFont>(selected);
+					m_FontChanged = true;
+				}
+				ImGui::EndMenu();
 			}
 
 			ImGui::Separator();
 			// Close
-			if (ImGui::MenuItem("Close"))
+			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
 				m_Running = false;
 			}
@@ -342,6 +394,22 @@ namespace Luha {
 
 			ImGui::EndMenu();
 		}
+	}
+
+	void Application::LoadFont()
+	{
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.Fonts->Clear();
+		switch (m_ApplicationSpecification.Font)
+		{
+			case AppFont::Roboto:     m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Regular.ttf", m_ApplicationSpecification.FontSize); IM_ASSERT(m_Font != NULL && "Failed to load Roboto font!");  break;
+			case AppFont::Montserrat: m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Montserrat-Regular.ttf", m_ApplicationSpecification.FontSize); break;
+			case AppFont::Oswald:     m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans-Regular.ttf", m_ApplicationSpecification.FontSize); break;
+			case AppFont::OpenSans:   m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Oswald-Regular.ttf", m_ApplicationSpecification.FontSize); break;
+			default:                  m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Regular.ttf", m_ApplicationSpecification.FontSize);  break;
+		}	
+		ImGui_ImplOpenGL3_CreateFontsTexture();
+		m_FontChanged = false;
 	}
 
 }

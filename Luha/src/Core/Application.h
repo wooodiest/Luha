@@ -9,12 +9,19 @@
 #include "Core/Window.h"
 
 #include "glm/glm.hpp"
+#include "imgui.h"
 
 namespace Luha {
 
-	enum class ImGuiColorTheme
+	enum class AppColorTheme
 	{
 		Dark = 1, Classic, Light
+	};
+
+	// TODO load all fonts in font dir instead of hardcoding them
+	enum class AppFont
+	{
+		Roboto = 1, OpenSans, Oswald, Montserrat
 	};
 
 	struct ApplicationSpecification
@@ -27,10 +34,11 @@ namespace Luha {
 		uint32_t Window_Max_Width  = 0;
 		uint32_t Window_Max_Height = 0;
 		bool     Window_Resizeable = true;
-		bool     VSync             = true;
+		bool     VSync             = true; // TODO: Custom frame lock
 		bool     MenuBar           = true;
-		ImGuiColorTheme ColorThema = ImGuiColorTheme::Dark;
-
+		AppColorTheme ColorThema   = AppColorTheme::Dark;
+		AppFont       Font         = AppFont::Roboto;
+		float         FontSize     = 18.0f;
 	};
 	
 	class Application
@@ -56,6 +64,9 @@ namespace Luha {
 		Scope<Window> m_Window;
 		LayerStack m_LayerStack;
 
+		ImFont* m_Font = nullptr;
+		bool m_FontChanged = false;
+
 		glm::vec4 m_ClearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
 		bool m_Running = true;
 		bool m_Minimized = false;
@@ -72,6 +83,7 @@ namespace Luha {
 		void SetImGuiTheme();
 
 		void OnApplicationMainMenuRender();
+		void LoadFont();
 
 	private:
 		static Application* s_Instance;

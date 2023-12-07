@@ -16,7 +16,9 @@ Luha::Application* Luha::CreateApplication(int argc, char** argv)
 	spec.VSync             = true;
 	spec.Window_Resizeable = true;
 	spec.MenuBar           = true;
-	spec.ColorThema        = Luha::ImGuiColorTheme::Dark;
+	spec.ColorThema        = Luha::AppColorTheme::Dark;
+	spec.Font              = Luha::AppFont::Roboto;
+	spec.FontSize          = 20.0f;
 
 	Luha::Application* app = new Luha::Application(spec);
 	app->PushLayer(new ExampleApp::ExampleLayer());
