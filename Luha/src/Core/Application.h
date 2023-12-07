@@ -8,22 +8,15 @@
 #include "Core/LayerStack.h"
 #include "Core/Window.h"
 
+#include "Utils/Utils.h"
+
 #include "glm/glm.hpp"
 #include "imgui.h"
+#include "implot.h"
 
 namespace Luha {
 
-	enum class AppColorTheme
-	{
-		Dark = 1, Classic, Light
-	};
-
-	// TODO load all fonts in font dir instead of hardcoding them
-	enum class AppFont
-	{
-		Roboto = 1, OpenSans, Oswald, Montserrat
-	};
-
+	// Struct that describes application
 	struct ApplicationSpecification
 	{
 		char*    Name              = "Luha App";
@@ -31,14 +24,16 @@ namespace Luha {
 		uint32_t Window_Height     = 900;
 		uint32_t Window_Min_Width  = 0;
 		uint32_t Window_Min_Height = 0;
-		uint32_t Window_Max_Width  = 0;
-		uint32_t Window_Max_Height = 0;
+		uint32_t Window_Max_Width  = 0;    // no limit
+		uint32_t Window_Max_Height = 0;    // no limit
 		bool     Window_Resizeable = true;
 		bool     VSync             = true; // TODO: Custom frame lock
 		bool     MenuBar           = true;
-		AppColorTheme ColorThema   = AppColorTheme::Dark;
-		AppFont       Font         = AppFont::Roboto;
-		float         FontSize     = 18.0f;
+		AppColorTheme  ColorThema    = AppColorTheme::Dark;
+		PlotColorTheme PlotThema     = PlotColorTheme::Auto;
+		PlotColorMap   PlotColor_Map = PlotColorMap::Deep; // Deafult colors for plots
+		AppFont        Font          = AppFont::Roboto;
+		float          FontSize      = 20.0f;
 	};
 	
 	class Application
@@ -47,43 +42,64 @@ namespace Luha {
 		Application(const ApplicationSpecification& spec = ApplicationSpecification());
 		virtual ~Application();
 
+		// Runloop
 		void Run();
-		void Close();
 		void OnEvent(Event& e);
+
+		// Management
+		void Init(const ApplicationSpecification& spec);
+		void Close();
 		void PushLayer(Layer* layer);
 
-		inline static Application& Get() { return *s_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
-		float GetTime() const;
-		Timestep GetDeltaTime() const;
+		// Getters
+		inline static Application& Get()       { return *s_Instance; }
+		inline Window&             GetWindow() { return *m_Window; }
+		ApplicationSpecification   GetSpec()      const { return m_AppSpec; }
+		Timestep                   GetDeltaTime() const { return m_DeltaTime;};
+		float                      GetTime()      const;
 
 	private:
+		// On Event
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
-		ApplicationSpecification m_ApplicationSpecification;
-		Scope<Window> m_Window;
-		LayerStack m_LayerStack;
-
-		ImFont* m_Font = nullptr;
-		bool m_FontChanged = false;
-
-		glm::vec4 m_ClearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
-		bool m_Running = true;
-		bool m_Minimized = false;
-		Timestep m_LastFrameTime = 0.0f;
-		Timestep m_DeltaTime = 0.0f;
 
 	private:
+		// Application data
+		ApplicationSpecification m_AppSpec;
+		Scope<Window> m_Window;
+		LayerStack    m_LayerStack;
+
+		glm::vec4 m_ClearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
+		bool m_Running   = true;
+		bool m_Minimized = false;
+		Timestep m_LastFrameTime = 0.0f;
+		Timestep m_DeltaTime     = 0.0f;
+
+		ImFont* m_Font = nullptr;
+		bool    m_FontChanged = false;
+
+	private:	
+		// ImGui
 		void InitImGui();
 		void ShutdownImGui();
-		void BeginImGuiFrame();
-		void EndImGuiFrame();
-		void BeginImGuiMainDockingWindow();
-		void EndImGuiMainDockingWindow();
-		void SetImGuiTheme();
 
-		void OnApplicationMainMenuRender();
+		void BeginImGuiFrame();
+		void RenderImGuiFrame();
+
+		void BeginMainWindow();
+		void EndMainWindow();
+		void RenderMainMenu();
+		void RenderAdditionalWindows();
+
+		void SetImGuiTheme();
+		void SetImPlotTheme();
 		void LoadFont();
+
+		bool m_ShowImGuiDebbuger = false;
+		bool m_ShowImGuiStackTool = false;
+		bool m_ShowImGuiStyleTool = false;
+		bool m_ShowImPlotDebbuger = false;
+		bool m_ShowImPlotStyleTool = false;
 
 	private:
 		static Application* s_Instance;

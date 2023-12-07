@@ -40,7 +40,7 @@ namespace ExampleApp {
 		clock.OnUpdate();
 	}
 
-	void ExampleLayer::OnImGuiRender()
+	void ExampleLayer::OnRender()
 	{
 		LH_PROFILE_FUNCTION();
 
@@ -56,7 +56,7 @@ namespace ExampleApp {
 
 	}
 
-	void ExampleLayer::OnMainMenuRender()
+	void ExampleLayer::OnMenuRender()
 	{
 		LH_PROFILE_FUNCTION();
 

@@ -1,6 +1,6 @@
 #include "Luha.h"
 #include "Core/EntryPoint.h"
-
+#include "implot.h"
 #include "ExampleLayer.h"
 
 Luha::Application* Luha::CreateApplication(int argc, char** argv)
@@ -17,6 +17,8 @@ Luha::Application* Luha::CreateApplication(int argc, char** argv)
 	spec.Window_Resizeable = true;
 	spec.MenuBar           = true;
 	spec.ColorThema        = Luha::AppColorTheme::Dark;
+	spec.PlotThema         = Luha::PlotColorTheme::Auto;
+	spec.PlotColor_Map     = Luha::PlotColorMap::Dark;
 	spec.Font              = Luha::AppFont::Roboto;
 	spec.FontSize          = 20.0f;
 

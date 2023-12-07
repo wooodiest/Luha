@@ -6,4 +6,3 @@
 #define LH_LOG_TO_CONSOLE 1
 #define LH_LOG_TO_FILE 1
 #define LH_PROFILE 1
-#define LH_UPDATE_ON_MINIMIZED 1

@@ -13,8 +13,8 @@ namespace ExampleApp {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnUpdate(Luha::Timestep ts) override;
-		virtual void OnImGuiRender() override;
-		virtual void OnMainMenuRender() override;
+		virtual void OnRender() override;
+		virtual void OnMenuRender() override;
 		virtual void OnEvent(Luha::Event& event) override;
 
 	};
