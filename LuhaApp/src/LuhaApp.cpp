@@ -1,7 +1,7 @@
-#include "Luha.h"
-#include "Core/EntryPoint.h"
-#include "implot.h"
-#include "ExampleLayer.h"
+#include <Luha.h>
+#include <Core/EntryPoint.h>
+
+#include <ExampleLayer.h>
 
 Luha::Application* Luha::CreateApplication(int argc, char** argv)
 {

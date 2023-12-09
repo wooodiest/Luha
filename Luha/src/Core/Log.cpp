@@ -23,7 +23,7 @@ namespace Luha {
 				// Logs to console and file	
 				std::vector<spdlog::sink_ptr> logSinks;
 				logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-				logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Data/Luha.log", true));
+				logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("data/Luha.log", true));
 
 				logSinks[0]->set_pattern("%^[%T] %n: %v%$");
 				logSinks[1]->set_pattern("[%T] [%l] %n: %v");
@@ -51,7 +51,7 @@ namespace Luha {
 			#elif LH_LOG_TO_CONSOLE == 0 && LH_LOG_TO_FILE == 1
 				// Logs to file
 				std::vector<spdlog::sink_ptr> logSinks;
-				logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Data/Luha.log", true));
+				logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("data/Luha.log", true));
 				logSinks[0]->set_pattern("[%T] [%l] %n: %v");
 
 				s_CoreLogger = std::make_shared<spdlog::logger>("Luha", begin(logSinks), end(logSinks));
@@ -70,7 +70,7 @@ namespace Luha {
 		#elif LH_LOG_TO_FILE == 1
 			// Logs to file
 			std::vector<spdlog::sink_ptr> logSinks;
-			logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Data/Luha.log", true));
+			logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("data/Luha.log", true));
 			logSinks[0]->set_pattern("[%T] [%l] %n: %v");
 
 			s_CoreLogger = std::make_shared<spdlog::logger>("Luha", begin(logSinks), end(logSinks));
@@ -93,7 +93,7 @@ namespace Luha {
 		// Logs to console and file	
 		std::vector<spdlog::sink_ptr> logSinks;
 		logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Data/Luha.log", true));
+		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("data/Luha.log", true));
 
 		logSinks[0]->set_pattern("%^[%T] %n: %v%$");
 		logSinks[1]->set_pattern("[%T] [%l] %n: %v");
@@ -121,7 +121,7 @@ namespace Luha {
 	#elif LH_LOG_TO_CONSOLE == 0 && LH_LOG_TO_FILE == 1
 		// Logs to file
 		std::vector<spdlog::sink_ptr> logSinks;
-		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Data/Luha.log", true));
+		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("data/Luha.log", true));
 		logSinks[0]->set_pattern("[%T] [%l] %n: %v");
 
 		s_CoreLogger = std::make_shared<spdlog::logger>("Luha", begin(logSinks), end(logSinks));

@@ -20,6 +20,7 @@ namespace Luha {
 		virtual void OnMenuRender() {}
 		virtual void OnEvent(Event& event) {}
 
+		// To save and load data safely, decide when to use it. Luha only calls Serialize() when saved (Ctrl+S)
 		virtual void Serialize() {}
 		virtual void Deserialize() {}
 

@@ -115,9 +115,8 @@ namespace Luha {
 		s_Instance = this;
 		m_AppSpec = spec;
 
-#ifdef LH_SERIALIZING
 		DeserializeApplication();
-#endif
+
 		m_Window = CreateScope<Window>(m_AppSpec);
 		m_Window->SetEventCallback(LH_BIND_EVENT_FN(Application::OnEvent));
 
@@ -248,7 +247,7 @@ namespace Luha {
 
 		out << YAML::EndMap;
 
-		std::string filePath = "Data/Application.Luha";
+		std::string filePath = "data/Application.Luha";
 		std::filesystem::path fs_path = std::filesystem::path(filePath).parent_path();
 		if (!std::filesystem::exists(fs_path)) {
 			if (!std::filesystem::create_directories(fs_path)) {
@@ -271,10 +270,11 @@ namespace Luha {
 
 	void Application::DeserializeApplication()
 	{
+#ifdef LH_SERIALIZING
 		try {
 			ApplicationSpecification spec;
 
-			std::ifstream stream("Data/Application.Luha");
+			std::ifstream stream("data/Application.Luha");
 			std::stringstream strStream;
 			strStream << stream.rdbuf();
 			YAML::Node doc = YAML::Load(strStream.str());
@@ -295,13 +295,14 @@ namespace Luha {
 			spec.Font = (AppFont)doc["Font"].as<int>();
 			spec.FontSize = doc["FontSize"].as<float>();
 			///
-			LH_INFO("Application data loaded successfully\n");
+			LH_CORE_INFO("Application data loaded successfully\n");
 			m_AppSpec = spec;
 		}
 		catch (...)
 		{
-			LH_ERROR("Cannot load application data\n");
+			LH_CORE_ERROR("Cannot load application data\n");
 		}
+#endif
 	}
 
 	void Application::InitImGui()
@@ -312,7 +313,7 @@ namespace Luha {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.IniFilename = "Data/imgui.ini";
+		io.IniFilename = "data/imgui.ini";
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -661,14 +662,29 @@ namespace Luha {
 	{
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.Fonts->Clear();
+
+		std::string filePath = "";
 		switch (m_AppSpec.Font)
 		{
-			case AppFont::Roboto:     m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Regular.ttf", m_AppSpec.FontSize); IM_ASSERT(m_Font != NULL && "Failed to load Roboto font!");  break;
-			case AppFont::Montserrat: m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Montserrat-Regular.ttf", m_AppSpec.FontSize); break;
-			case AppFont::Oswald:     m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans-Regular.ttf", m_AppSpec.FontSize); break;
-			case AppFont::OpenSans:   m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Oswald-Regular.ttf", m_AppSpec.FontSize); break;
-			default:                  m_Font = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto-Regular.ttf", m_AppSpec.FontSize);  break;
-		}	
+			case AppFont::Roboto:     filePath = "assets/fonts/Roboto-Regular.ttf";   break;
+			case AppFont::Montserrat: filePath = "assets/fonts/Montserrat-Regular.ttf"; break;
+			case AppFont::Oswald:     filePath = "assets/fonts/Oswald-Regular.ttf";   break;
+			case AppFont::OpenSans:   filePath = "assets/fonts/OpenSans-Regular.ttf";   break;
+		}
+
+		std::filesystem::path path = std::filesystem::path(filePath);
+		if (!std::filesystem::exists(path) || filePath == "")
+		{
+			LH_CORE_ERROR("Invalid font path");
+			io.Fonts->AddFontDefault();
+			m_Font = io.Fonts->Fonts[0];
+		}
+		else
+		{
+			m_Font = io.Fonts->AddFontFromFileTTF(filePath.c_str(), m_AppSpec.FontSize);
+			
+		}
+		
 		ImGui_ImplOpenGL3_CreateFontsTexture();
 		m_FontChanged = false;
 	}

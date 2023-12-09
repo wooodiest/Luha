@@ -47,7 +47,7 @@ namespace Luha {
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
-			std::filesystem::path fs_path = std::filesystem::path("Data/Profile/");
+			std::filesystem::path fs_path = std::filesystem::path("data/profile/");
 			if (!std::filesystem::exists(fs_path)) {
 				if (!std::filesystem::create_directories(fs_path)) {
 					
