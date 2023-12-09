@@ -62,6 +62,7 @@ namespace Luha {
 		// On Event
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
 
 	private:
 		// Application data

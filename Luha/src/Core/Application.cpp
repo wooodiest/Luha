@@ -2,6 +2,7 @@
 
 #include "Core/Application.h"
 #include "Core/Timestep.h"
+#include "Core/Input.h"
 #include "Utils/Time.h"
 
 #include "glad/glad.h"
@@ -132,6 +133,7 @@ namespace Luha {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(LH_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(LH_BIND_EVENT_FN(Application::OnWindowResize));
+		dispatcher.Dispatch<KeyPressedEvent>(LH_BIND_EVENT_FN(Application::OnKeyPressed));
 
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
@@ -173,6 +175,37 @@ namespace Luha {
 		m_AppSpec.Window_Height = e.GetHeight();
 		m_AppSpec.Window_Width = e.GetWidth();
 
+		return false;
+	}
+
+	bool Application::OnKeyPressed(KeyPressedEvent& e)
+	{
+		// Shortcuts
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
+		switch (e.GetKeyCode())
+		{
+			case Key::S:
+			{
+				if (control)
+				{
+					// Save
+					LH_INFO("App data saved");
+				}
+				break;
+			}
+			case Key::F4:
+			{
+				if (Input::IsKeyPressed(Key::LeftAlt))
+				{
+					LH_INFO("EXIT");
+				}
+			}
+		}
 		return false;
 	}
 
@@ -427,7 +460,7 @@ namespace Luha {
 					{
 						ImPlotContext& gp = *ImPlot::GetCurrentContext();
 						bool set = false;
-						if (ImGui::BeginCombo("Color map##999999999999", gp.ColormapData.GetName(gp.Style.Colormap))) {
+						if (ImGui::BeginCombo(" Color map ##MainMenuColormap", gp.ColormapData.GetName(gp.Style.Colormap))) {
 							for (int i = 0; i < gp.ColormapData.Count; ++i) {
 								const char* name = gp.ColormapData.GetName(i);
 								if (ImGui::Selectable(name, gp.Style.Colormap == i)) {

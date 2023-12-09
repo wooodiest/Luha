@@ -18,7 +18,7 @@ Luha::Application* Luha::CreateApplication(int argc, char** argv)
 	spec.MenuBar           = true;
 	spec.ColorThema        = Luha::AppColorTheme::Dark;
 	spec.PlotThema         = Luha::PlotColorTheme::Auto;
-	spec.PlotColor_Map     = Luha::PlotColorMap::Dark;
+	spec.PlotColor_Map     = Luha::PlotColorMap::Deep;
 	spec.Font              = Luha::AppFont::Roboto;
 	spec.FontSize          = 20.0f;
 
