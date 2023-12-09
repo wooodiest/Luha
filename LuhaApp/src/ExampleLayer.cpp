@@ -78,4 +78,14 @@ namespace ExampleApp {
 			LH_INFO("Window Resized: ({0}, {1})", ev.GetWidth(), ev.GetHeight());
 		}
 	}
+
+	void ExampleLayer::Serialize()
+	{
+
+	}
+
+	void ExampleLayer::Deserialize()
+	{
+
+	}
 }

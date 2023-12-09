@@ -15,6 +15,7 @@ group "Dependencies"
 	include "Luha/vendor/GLFW"
 	include "Luha/vendor/Glad"
     include "Luha/vendor/imgui"
+    include "Luha/vendor/yaml"
 group ""
 
 include "Luha"

@@ -12,10 +12,14 @@ namespace ExampleApp {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
+
 		virtual void OnUpdate(Luha::Timestep ts) override;
 		virtual void OnRender() override;
 		virtual void OnMenuRender() override;
 		virtual void OnEvent(Luha::Event& event) override;
+
+		virtual void Serialize() override;
+		virtual void Deserialize() override;
 
 	};
 

@@ -4,6 +4,7 @@
 #include "Core/Timestep.h"
 #include "Core/Input.h"
 #include "Utils/Time.h"
+#include "Utils/Random.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -13,7 +14,9 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-#include "Utils/Random.h"
+#include <fstream>
+#include <filesystem>
+#include <yaml-cpp/yaml.h>
 
 namespace Luha {
 
@@ -31,6 +34,7 @@ namespace Luha {
 		LH_PROFILE_FUNCTION();
 
 		Close();
+		SerializeApplication();
 	}
 
 	void Application::Run()
@@ -109,11 +113,12 @@ namespace Luha {
 		Log::Init();
 
 		s_Instance = this;
-
-		// TODO: Try load spec from file. If cannot:
 		m_AppSpec = spec;
 
-		m_Window = CreateScope<Window>(spec);
+#ifdef LH_SERIALIZING
+		DeserializeApplication();
+#endif
+		m_Window = CreateScope<Window>(m_AppSpec);
 		m_Window->SetEventCallback(LH_BIND_EVENT_FN(Application::OnEvent));
 
 		InitImGui();
@@ -193,8 +198,7 @@ namespace Luha {
 			{
 				if (control)
 				{
-					// Save
-					LH_INFO("App data saved");
+					Serialize();
 				}
 				break;
 			}
@@ -202,11 +206,102 @@ namespace Luha {
 			{
 				if (Input::IsKeyPressed(Key::LeftAlt))
 				{
-					LH_INFO("EXIT");
 				}
 			}
 		}
 		return false;
+	}
+
+	void Application::Serialize()
+	{
+#ifdef LH_SERIALIZING
+
+		SerializeApplication();
+
+		for (Layer* layer : m_LayerStack)
+			layer->Serialize();
+
+#endif
+	}
+
+	void Application::SerializeApplication()
+	{
+#ifdef LH_SERIALIZING
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+
+		out << YAML::Key << "Name" << YAML::Value << m_AppSpec.Name;
+		out << YAML::Key << "Window_Width" << YAML::Value << m_AppSpec.Window_Width;
+		out << YAML::Key << "Window_Height" << YAML::Value << m_AppSpec.Window_Height;
+		out << YAML::Key << "Window_Min_Width" << YAML::Value << m_AppSpec.Window_Min_Width;
+		out << YAML::Key << "Window_Min_Height" << YAML::Value << m_AppSpec.Window_Min_Height;
+		out << YAML::Key << "Window_Max_Width" << YAML::Value << m_AppSpec.Window_Max_Width;
+		out << YAML::Key << "Window_Max_Height" << YAML::Value << m_AppSpec.Window_Max_Height;
+		out << YAML::Key << "Window_Resizeable" << YAML::Value << m_AppSpec.Window_Resizeable;
+		out << YAML::Key << "VSync" << YAML::Value << m_AppSpec.VSync;
+		out << YAML::Key << "MenuBar" << YAML::Value << m_AppSpec.MenuBar;
+		out << YAML::Key << "ColorThema" << YAML::Value << (int)m_AppSpec.ColorThema;
+		out << YAML::Key << "PlotThema" << YAML::Value << (int)m_AppSpec.PlotThema;
+		out << YAML::Key << "PlotColor_Map" << YAML::Value << (int)m_AppSpec.PlotColor_Map;
+		out << YAML::Key << "Font" << YAML::Value << (int)m_AppSpec.Font;
+		out << YAML::Key << "FontSize" << YAML::Value << m_AppSpec.FontSize;
+
+		out << YAML::EndMap;
+
+		std::string filePath = "Data/Application.Luha";
+		std::filesystem::path fs_path = std::filesystem::path(filePath).parent_path();
+		if (!std::filesystem::exists(fs_path)) {
+			if (!std::filesystem::create_directories(fs_path)) {
+				LH_CORE_ASSERT(false, "Error creating directory: {0}", (char*)fs_path.c_str());
+			}
+		}
+
+		std::ofstream fout(filePath);
+		if (fout.good())
+		{
+			fout << out.c_str();
+			LH_CORE_INFO("Application data saved successfully\n");
+		}
+		else
+		{
+			LH_CORE_ERROR("Error saving application data\n");
+		}
+#endif
+	}
+
+	void Application::DeserializeApplication()
+	{
+		try {
+			ApplicationSpecification spec;
+
+			std::ifstream stream("Data/Application.Luha");
+			std::stringstream strStream;
+			strStream << stream.rdbuf();
+			YAML::Node doc = YAML::Load(strStream.str());
+
+			spec.Name = doc["Name"].as<std::string>();
+			spec.Window_Width = doc["Window_Width"].as<int>();
+			spec.Window_Height = doc["Window_Height"].as<int>();
+			spec.Window_Min_Width = doc["Window_Min_Width"].as<int>();
+			spec.Window_Min_Height = doc["Window_Min_Height"].as<int>();
+			spec.Window_Max_Width = doc["Window_Max_Width"].as<int>();
+			spec.Window_Max_Height = doc["Window_Max_Height"].as<int>();
+			spec.VSync = doc["VSync"].as<bool>();
+			spec.Window_Resizeable = doc["Window_Resizeable"].as<bool>();
+			spec.MenuBar = doc["MenuBar"].as<bool>();
+			spec.ColorThema = (AppColorTheme)doc["ColorThema"].as<int>();
+			spec.PlotThema = (PlotColorTheme)doc["PlotThema"].as<int>();
+			spec.PlotColor_Map = (PlotColorMap)doc["PlotColor_Map"].as<int>();
+			spec.Font = (AppFont)doc["Font"].as<int>();
+			spec.FontSize = doc["FontSize"].as<float>();
+			///
+			LH_INFO("Application data loaded successfully\n");
+			m_AppSpec = spec;
+		}
+		catch (...)
+		{
+			LH_ERROR("Cannot load application data\n");
+		}
 	}
 
 	void Application::InitImGui()
@@ -217,6 +312,7 @@ namespace Luha {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.IniFilename = "Data/imgui.ini";
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -384,7 +480,7 @@ namespace Luha {
 			// Save
 			if (ImGui::MenuItem("Save##MainMenuSave", "Ctrl+S"))
 			{
-				// TODO
+				Serialize();
 			}
 
 			// Vsync
@@ -393,6 +489,7 @@ namespace Luha {
 			if (ImGui::MenuItem("Vsync##MainMenuVsync", "", &vsync))
 			{
 				GetWindow().SetVSync(vsync);
+				SerializeApplication();
 			}
 			
 			// Theme
@@ -409,18 +506,21 @@ namespace Luha {
 						selected = 1;
 						m_AppSpec.ColorThema = static_cast<AppColorTheme>(selected);
 						SetImGuiTheme();
+						SerializeApplication();
 					}
 					if (ImGui::Selectable("Classic  ##MainMenuAppThemeClassic", selected == 2))
 					{
 						selected = 2;
 						m_AppSpec.ColorThema = static_cast<AppColorTheme>(selected);
 						SetImGuiTheme();
+						SerializeApplication();
 					}
 					if (ImGui::Selectable("Light  ##MainMenuAppThemeLight", selected == 3))
 					{
 						selected = 3;
 						m_AppSpec.ColorThema = static_cast<AppColorTheme>(selected);
 						SetImGuiTheme();
+						SerializeApplication();
 					}
 				}
 				// Plots
@@ -434,6 +534,7 @@ namespace Luha {
 						selected = 1;
 						m_AppSpec.PlotThema = static_cast<PlotColorTheme>(selected);
 						SetImPlotTheme();
+						SerializeApplication();
 					}
 
 					if (ImGui::Selectable("Dark  ##MainMenuPlotThemeDark", selected == 2))
@@ -441,18 +542,21 @@ namespace Luha {
 						selected = 2;
 						m_AppSpec.PlotThema = static_cast<PlotColorTheme>(selected);
 						SetImPlotTheme();
+						SerializeApplication();
 					}
 					if (ImGui::Selectable("Classic  ##MainMenuPlotThemeClassic", selected == 3))
 					{
 						selected = 3;
 						m_AppSpec.PlotThema = static_cast<PlotColorTheme>(selected);
 						SetImPlotTheme();
+						SerializeApplication();
 					}
 					if (ImGui::Selectable("Light  ##MainMenuPlotThemeLight", selected == 4))
 					{
 						selected = 4;
 						m_AppSpec.PlotThema = static_cast<PlotColorTheme>(selected);
 						SetImPlotTheme();
+						SerializeApplication();
 					}
 					ImGui::Separator();
 
@@ -467,6 +571,7 @@ namespace Luha {
 									gp.Style.Colormap = i;
 									m_AppSpec.PlotColor_Map = static_cast<PlotColorMap>(i);
 									ImPlot::BustItemCache();
+									SerializeApplication();
 									set = true;
 								}
 							}
@@ -484,6 +589,7 @@ namespace Luha {
 				if (ImGui::DragFloat(" Font size ##MainMenuFontSize", &m_AppSpec.FontSize, 0.5f, 9.0f, 50.0f, "%.1f", ImGuiSliderFlags_AlwaysClamp))
 				{
 					m_FontChanged = true;
+					SerializeApplication();
 				}
 
 				ImGui::Separator();
@@ -493,24 +599,28 @@ namespace Luha {
 					selected = 1;
 					m_AppSpec.Font = static_cast<AppFont>(selected);
 					m_FontChanged = true;
+					SerializeApplication();
 				}
 				if (ImGui::Selectable("OpenSans##MainMenuFont-OpenSans", selected == 2))
 				{
 					selected = 2;
 					m_AppSpec.Font = static_cast<AppFont>(selected);
 					m_FontChanged = true;
+					SerializeApplication();
 				}
 				if (ImGui::Selectable("Oswald##MainMenuFont-Oswald", selected == 3))
 				{
 					selected = 3;
 					m_AppSpec.Font = static_cast<AppFont>(selected);
 					m_FontChanged = true;
+					SerializeApplication();
 				}
 				if (ImGui::Selectable("Montserrat##MainMenuFont-Montserrat", selected == 4))
 				{
 					selected = 4;
 					m_AppSpec.Font = static_cast<AppFont>(selected);
 					m_FontChanged = true;
+					SerializeApplication();
 				}
 				ImGui::EndMenu();
 			} // Font

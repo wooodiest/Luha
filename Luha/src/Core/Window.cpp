@@ -217,5 +217,7 @@ namespace Luha {
 			glfwSwapInterval(0);
 
 		m_Data.Vsync = enabled;
+
+		Application::Get().m_AppSpec.VSync = enabled;
 	}
 }

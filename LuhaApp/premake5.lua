@@ -21,12 +21,18 @@ project "LuhaApp"
 		"%{wks.location}/Luha/vendor/spdlog/include",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.ImPlot}"
+		"%{IncludeDir.ImPlot}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links
 	{
 		"Luha"
+	}
+
+	defines
+	{
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 	filter "system:windows"

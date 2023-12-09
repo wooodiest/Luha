@@ -21,7 +21,8 @@ project "Luha"
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 	includedirs
@@ -32,7 +33,8 @@ project "Luha"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.ImPlot}"
+		"%{IncludeDir.ImPlot}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links 
@@ -40,7 +42,8 @@ project "Luha"
 		"GLFW",
 		"Glad",
 		"opengl32.lib",
-		"ImGui"
+		"ImGui",
+		"yaml-cpp"
 	}
 
 	filter "system:windows"

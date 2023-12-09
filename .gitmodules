@@ -14,3 +14,6 @@
 [submodule "Luha/vendor/implot"]
 	path = Luha/vendor/implot
 	url = https://github.com/wooodiest/implot
+[submodule "Luha/vendor/yaml"]
+	path = Luha/vendor/yaml
+	url = https://github.com/wooodiest/yaml-cpp

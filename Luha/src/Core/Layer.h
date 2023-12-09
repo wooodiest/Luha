@@ -20,6 +20,9 @@ namespace Luha {
 		virtual void OnMenuRender() {}
 		virtual void OnEvent(Event& event) {}
 
+		virtual void Serialize() {}
+		virtual void Deserialize() {}
+
 	};
 
 }

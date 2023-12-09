@@ -19,26 +19,28 @@ namespace Luha {
 	// Struct that describes application
 	struct ApplicationSpecification
 	{
-		char*    Name              = "Luha App";
-		uint32_t Window_Width      = 1600;
-		uint32_t Window_Height     = 900;
-		uint32_t Window_Min_Width  = 0;
-		uint32_t Window_Min_Height = 0;
-		uint32_t Window_Max_Width  = 0;    // no limit
-		uint32_t Window_Max_Height = 0;    // no limit
-		bool     Window_Resizeable = true;
-		bool     VSync             = true; // TODO: Custom frame lock
-		bool     MenuBar           = true;
-		AppColorTheme  ColorThema    = AppColorTheme::Dark;
-		PlotColorTheme PlotThema     = PlotColorTheme::Auto;
-		PlotColorMap   PlotColor_Map = PlotColorMap::Deep; // Deafult colors for plots
-		AppFont        Font          = AppFont::Roboto;
-		float          FontSize      = 20.0f;
-	};
+		std::string Name              = "Luha App";
+		uint32_t    Window_Width      = 1600;
+		uint32_t    Window_Height     = 900;
+		uint32_t    Window_Min_Width  = 0;
+		uint32_t    Window_Min_Height = 0;
+		uint32_t    Window_Max_Width  = 0;    // no limit
+		uint32_t    Window_Max_Height = 0;    // no limit
+		bool        Window_Resizeable = true;
+		bool        VSync             = true; // TODO: Custom frame lock
+		bool        MenuBar           = true;
+		AppColorTheme  ColorThema     = AppColorTheme::Dark;
+		PlotColorTheme PlotThema      = PlotColorTheme::Auto;
+		PlotColorMap   PlotColor_Map  = PlotColorMap::Deep; // Deafult colors for plots
+		AppFont        Font           = AppFont::Roboto;
+		float          FontSize       = 20.0f;
+	};								  
 	
 	class Application
 	{
 	public:
+		friend class Window;
+
 		Application(const ApplicationSpecification& spec = ApplicationSpecification());
 		virtual ~Application();
 
@@ -63,6 +65,11 @@ namespace Luha {
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnKeyPressed(KeyPressedEvent& e);
+
+		// Serialize 
+		void Serialize();
+		void SerializeApplication();
+		void DeserializeApplication();
 
 	private:
 		// Application data

@@ -18,7 +18,7 @@
 #include <thread>
 #include <mutex>
 #include <sstream>
-
+#include <filesystem>
 #include "Core/ApplicationSettings.h"
 
 namespace Luha {
@@ -47,6 +47,13 @@ namespace Luha {
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
+			std::filesystem::path fs_path = std::filesystem::path("Data/Profile/");
+			if (!std::filesystem::exists(fs_path)) {
+				if (!std::filesystem::create_directories(fs_path)) {
+					
+				}
+			}
+
 			std::lock_guard lock(m_Mutex);
 			if (m_CurrentSession)
 			{
