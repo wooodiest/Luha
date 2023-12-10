@@ -69,7 +69,7 @@ namespace Luha {
 		// Serialize 
 		void Serialize();
 		void SerializeApplication();
-		void DeserializeApplication();
+		bool DeserializeApplication();
 
 	private:
 		// Application data

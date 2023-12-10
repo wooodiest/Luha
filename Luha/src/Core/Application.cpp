@@ -110,12 +110,19 @@ namespace Luha {
 
 	void Application::Init(const ApplicationSpecification& spec)
 	{
-		Log::Init();
-
 		s_Instance = this;
 		m_AppSpec = spec;
 
-		DeserializeApplication();
+#ifdef LH_SERIALIZING
+
+		bool status = DeserializeApplication();
+		Log::Init();
+		if(status)
+			LH_CORE_INFO("Application data loaded successfully\n");
+		else
+			LH_CORE_ERROR("Cannot load application data\n");
+
+#endif
 
 		m_Window = CreateScope<Window>(m_AppSpec);
 		m_Window->SetEventCallback(LH_BIND_EVENT_FN(Application::OnEvent));
@@ -229,21 +236,26 @@ namespace Luha {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 
-		out << YAML::Key << "Name" << YAML::Value << m_AppSpec.Name;
-		out << YAML::Key << "Window_Width" << YAML::Value << m_AppSpec.Window_Width;
-		out << YAML::Key << "Window_Height" << YAML::Value << m_AppSpec.Window_Height;
-		out << YAML::Key << "Window_Min_Width" << YAML::Value << m_AppSpec.Window_Min_Width;
+		out << YAML::Key << "Name"              << YAML::Value << m_AppSpec.Name;
+		out << YAML::Key << "Window_Width"      << YAML::Value << m_AppSpec.Window_Width;
+		out << YAML::Key << "Window_Height"     << YAML::Value << m_AppSpec.Window_Height;
+		out << YAML::Key << "Window_Min_Width"  << YAML::Value << m_AppSpec.Window_Min_Width;
 		out << YAML::Key << "Window_Min_Height" << YAML::Value << m_AppSpec.Window_Min_Height;
-		out << YAML::Key << "Window_Max_Width" << YAML::Value << m_AppSpec.Window_Max_Width;
+		out << YAML::Key << "Window_Max_Width"  << YAML::Value << m_AppSpec.Window_Max_Width;
 		out << YAML::Key << "Window_Max_Height" << YAML::Value << m_AppSpec.Window_Max_Height;
 		out << YAML::Key << "Window_Resizeable" << YAML::Value << m_AppSpec.Window_Resizeable;
-		out << YAML::Key << "VSync" << YAML::Value << m_AppSpec.VSync;
-		out << YAML::Key << "MenuBar" << YAML::Value << m_AppSpec.MenuBar;
-		out << YAML::Key << "ColorThema" << YAML::Value << (int)m_AppSpec.ColorThema;
-		out << YAML::Key << "PlotThema" << YAML::Value << (int)m_AppSpec.PlotThema;
-		out << YAML::Key << "PlotColor_Map" << YAML::Value << (int)m_AppSpec.PlotColor_Map;
-		out << YAML::Key << "Font" << YAML::Value << (int)m_AppSpec.Font;
-		out << YAML::Key << "FontSize" << YAML::Value << m_AppSpec.FontSize;
+		out << YAML::Key << "VSync"             << YAML::Value << m_AppSpec.VSync;
+		out << YAML::Key << "MenuBar"           << YAML::Value << m_AppSpec.MenuBar;
+		out << YAML::Key << "ColorThema"        << YAML::Value << (int)m_AppSpec.ColorThema;
+		out << YAML::Key << "PlotThema"         << YAML::Value << (int)m_AppSpec.PlotThema;
+		out << YAML::Key << "PlotColor_Map"     << YAML::Value << (int)m_AppSpec.PlotColor_Map;
+		out << YAML::Key << "Font"              << YAML::Value << (int)m_AppSpec.Font;
+		out << YAML::Key << "FontSize"          << YAML::Value << m_AppSpec.FontSize;
+
+		out << YAML::Key << "LogToFile"    << YAML::Value << Log::LogToFile;
+		out << YAML::Key << "LogToConsole" << YAML::Value << Log::LogToConsole;
+		out << YAML::Key << "LuhaLogLevel" << YAML::Value << (int)Log::s_CoreLevel;
+		out << YAML::Key << "AppLogLevel"  << YAML::Value << (int)Log::s_ClientLevel;
 
 		out << YAML::EndMap;
 
@@ -268,9 +280,8 @@ namespace Luha {
 #endif
 	}
 
-	void Application::DeserializeApplication()
+	bool Application::DeserializeApplication()
 	{
-#ifdef LH_SERIALIZING
 		try {
 			ApplicationSpecification spec;
 
@@ -279,30 +290,39 @@ namespace Luha {
 			strStream << stream.rdbuf();
 			YAML::Node doc = YAML::Load(strStream.str());
 
-			spec.Name = doc["Name"].as<std::string>();
-			spec.Window_Width = doc["Window_Width"].as<int>();
-			spec.Window_Height = doc["Window_Height"].as<int>();
-			spec.Window_Min_Width = doc["Window_Min_Width"].as<int>();
+			spec.Name              = doc["Name"].as<std::string>();
+			spec.Window_Width      = doc["Window_Width"].as<int>();
+			spec.Window_Height     = doc["Window_Height"].as<int>();
+			spec.Window_Min_Width  = doc["Window_Min_Width"].as<int>();
 			spec.Window_Min_Height = doc["Window_Min_Height"].as<int>();
-			spec.Window_Max_Width = doc["Window_Max_Width"].as<int>();
+			spec.Window_Max_Width  = doc["Window_Max_Width"].as<int>();
 			spec.Window_Max_Height = doc["Window_Max_Height"].as<int>();
-			spec.VSync = doc["VSync"].as<bool>();
+			spec.VSync             = doc["VSync"].as<bool>();
 			spec.Window_Resizeable = doc["Window_Resizeable"].as<bool>();
-			spec.MenuBar = doc["MenuBar"].as<bool>();
-			spec.ColorThema = (AppColorTheme)doc["ColorThema"].as<int>();
-			spec.PlotThema = (PlotColorTheme)doc["PlotThema"].as<int>();
-			spec.PlotColor_Map = (PlotColorMap)doc["PlotColor_Map"].as<int>();
-			spec.Font = (AppFont)doc["Font"].as<int>();
-			spec.FontSize = doc["FontSize"].as<float>();
-			///
-			LH_CORE_INFO("Application data loaded successfully\n");
-			m_AppSpec = spec;
+			spec.MenuBar           = doc["MenuBar"].as<bool>();
+			spec.ColorThema        = (AppColorTheme)doc["ColorThema"].as<int>();
+			spec.PlotThema         = (PlotColorTheme)doc["PlotThema"].as<int>();
+			spec.PlotColor_Map     = (PlotColorMap)doc["PlotColor_Map"].as<int>();
+			spec.Font              = (AppFont)doc["Font"].as<int>();
+			spec.FontSize          = doc["FontSize"].as<float>();
+
+			bool logToFile    = doc["LogToFile"].as<bool>();
+			bool logToConsole = doc["LogToConsole"].as<bool>();
+			auto logCoreLevel = (spdlog::level::level_enum)doc["LuhaLogLevel"].as<int>();
+			auto logAppLevel  = (spdlog::level::level_enum)doc["AppLogLevel"].as<int>();
+
+			///		
+			m_AppSpec          = spec;
+			Log::LogToFile     = logToFile;
+			Log::LogToConsole  = logToConsole;
+			Log::s_CoreLevel   = logCoreLevel;
+			Log::s_ClientLevel = logAppLevel;
 		}
 		catch (...)
 		{
-			LH_CORE_ERROR("Cannot load application data\n");
+			return false;
 		}
-#endif
+		return true;
 	}
 
 	void Application::InitImGui()
@@ -647,6 +667,123 @@ namespace Luha {
 				ImGui::EndMenu();
 			}
 			 
+			// Log
+
+			if (ImGui::BeginMenu("Logs##MainMenuLogs"))
+			{
+				ImGui::Text("Log to:");
+			
+#if defined(LH_PLATFORM_WINDOWS) && defined(LH_DIST) && LH_CONSOLE_IN_DISTRIBUTION_BUILD == 0
+	// No consol			
+#else
+				if (ImGui::Checkbox("Console", &Log::LogToConsole))
+				{
+					Log::UpdateLogger();
+					SerializeApplication();
+				}
+#endif
+				if (ImGui::Checkbox("File", &Log::LogToFile))
+				{
+					Log::UpdateLogger();
+					SerializeApplication();
+				}
+
+				ImGui::SeparatorText("Log level");
+
+				char* levels[6] = { "Trace", "", "Info", "Warn", "Error", "Critical" };
+
+				{
+					int selected = static_cast<int>(Log::s_CoreLevel);
+					if (ImGui::BeginCombo("Luha", levels[selected]))
+					{
+						if (ImGui::Selectable("Trace##MainMenuLogsCoreTrace", selected == 0))
+						{
+							selected = 0;
+							Log::s_CoreLevel = spdlog::level::trace;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Info##MainMenuLogsCoreInfo", selected == 2))
+						{
+							selected = 2;
+							Log::s_CoreLevel = spdlog::level::info;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Warn##MainMenuLogsCoreWorn", selected == 3))
+						{
+							selected = 3;
+							Log::s_CoreLevel = spdlog::level::warn;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Error##MainMenuLogsCoreError", selected == 4))
+						{
+							selected = 4;
+							Log::s_CoreLevel = spdlog::level::err;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Critical##MainMenuLogsCoreCritical", selected == 5))
+						{
+							selected = 5;
+							Log::s_CoreLevel = spdlog::level::critical;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+
+						ImGui::EndCombo();
+					}
+				}
+				
+				{
+					int selected = static_cast<int>(Log::s_ClientLevel);
+					if (ImGui::BeginCombo("App", levels[selected]))
+					{
+						if (ImGui::Selectable("Trace##MainMenuLogsAppTrace", selected == 0))
+						{
+							selected = 0;
+							Log::s_ClientLevel = spdlog::level::trace;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Info##MainMenuLogsAppInfo", selected == 2))
+						{
+							selected = 2;
+							Log::s_ClientLevel = spdlog::level::info;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Warn##MainMenuLogsAppWorn", selected == 3))
+						{
+							selected = 3;
+							Log::s_ClientLevel = spdlog::level::warn;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Error##MainMenuLogsAppError", selected == 4))
+						{
+							selected = 4;
+							Log::s_ClientLevel = spdlog::level::err;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+						if (ImGui::Selectable("Critical##MainMenuLogsAppCritical", selected == 5))
+						{
+							selected = 5;
+							Log::s_ClientLevel = spdlog::level::critical;
+							Log::UpdateLogger();
+							SerializeApplication();
+						}
+
+						ImGui::EndCombo();
+					}
+				}
+
+			ImGui::EndMenu();
+		}
+			
+
 			// Exit
 			ImGui::Separator();
 			if (ImGui::MenuItem("Exit##MainMenuExit", "Alt+F4"))
