@@ -1,12 +1,12 @@
 Name: Luha Application
 Window_Width: 1600
-Window_Height: 900
+Window_Height: 893
 Window_Min_Width: 1280
 Window_Min_Height: 720
 Window_Max_Width: 0
 Window_Max_Height: 0
 Window_Resizeable: true
-VSync: true
+VSync: false
 MenuBar: true
 ColorThema: 1
 PlotThema: 1

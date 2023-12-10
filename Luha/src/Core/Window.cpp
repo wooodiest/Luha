@@ -44,6 +44,9 @@ namespace Luha {
 			int success = glfwInit();
 			LH_CORE_ASSERT(success, "Could not initialize GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
+
+			if(success)
+				LH_CORE_TRACE("GLFW has been initialized successfully");
 		}
 
 		// Create window and set size limits
@@ -51,7 +54,7 @@ namespace Luha {
 			LH_PROFILE_SCOPE("Creating window");
 
 			m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-			LH_CORE_INFO("Created window : {0} ({1}, {2})\n", m_Data.Title, m_Data.Width, m_Data.Height);
+			LH_CORE_TRACE("Created window : {0} ({1}, {2})", m_Data.Title, m_Data.Width, m_Data.Height);
 		}
 		
 		if (spec.Window_Resizeable)
@@ -72,16 +75,19 @@ namespace Luha {
 
 			int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 			LH_CORE_ASSERT(success, "Failed to initialize Glad!");
+
+			if (success)
+				LH_CORE_TRACE("Glad has been initialized successfully");
 		}
 		
-		LH_CORE_INFO("OpenGL Info:");
-		LH_CORE_INFO("Vendor:   {0}", (char*)glGetString(GL_VENDOR));
-		LH_CORE_INFO("Renderer: {0}", (char*)glGetString(GL_RENDERER));
-		LH_CORE_INFO("Version:  {0}", (char*)glGetString(GL_VERSION));
-		LH_CORE_INFO("Shading:  {0}\n", (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+		LH_CORE_TRACE("Vendor: {0}", (char*)glGetString(GL_VENDOR));
+		LH_CORE_TRACE("Renderer: {0}", (char*)glGetString(GL_RENDERER));
+		LH_CORE_TRACE("Version: {0}", (char*)glGetString(GL_VERSION));
+		LH_CORE_TRACE("Shading: {0}", (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		LH_CORE_TRACE("Blending: ONE_MINUS_SRC_ALPHA");
 
 		// Set local window data
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -217,7 +223,9 @@ namespace Luha {
 			glfwSwapInterval(0);
 
 		m_Data.Vsync = enabled;
-
 		Application::Get().m_AppSpec.VSync = enabled;
+
+		char* ch = enabled ? "enabled" : "disabled";
+		LH_CORE_TRACE("VSync: {0}", ch);
 	}
 }

@@ -112,11 +112,11 @@ namespace ExampleApp {
 		if (fout.good())
 		{
 			fout << out.c_str();
-			LH_INFO("Example data saved successfully\n");
+			LH_INFO("Example data saved successfully");
 		}
 		else
 		{
-			LH_ERROR("Error saving example data\n");
+			LH_ERROR("Error saving example data");
 		}
 #endif
 	}
@@ -134,13 +134,13 @@ namespace ExampleApp {
 			std::string name = doc["Character"].as<std::string>();
 			glm::vec4 color = doc["Color"].as<glm::vec4>();
 			
-			LH_INFO("Example data loaded successfully\n");
+			LH_INFO("Example data loaded successfully");
 			m_Character = name;
 			m_Color = color;
 		}
 		catch (...)
 		{
-			LH_ERROR("Cannot load example data\n");
+			LH_ERROR("Cannot load example data");
 		}
 
 #endif

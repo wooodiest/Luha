@@ -103,10 +103,10 @@ namespace Luha {
 		void SetImPlotTheme();
 		void LoadFont();
 
-		bool m_ShowImGuiDebbuger = false;
+		bool m_ShowImGuiDebugger = false;
 		bool m_ShowImGuiStackTool = false;
 		bool m_ShowImGuiStyleTool = false;
-		bool m_ShowImPlotDebbuger = false;
+		bool m_ShowImPlotDebugger = false;
 		bool m_ShowImPlotStyleTool = false;
 
 	private:

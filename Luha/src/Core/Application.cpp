@@ -118,9 +118,9 @@ namespace Luha {
 		bool status = DeserializeApplication();
 		Log::Init();
 		if(status)
-			LH_CORE_INFO("Application data loaded successfully\n");
+			LH_CORE_INFO("Application data loaded successfully");
 		else
-			LH_CORE_ERROR("Cannot load application data\n");
+			LH_CORE_ERROR("Cannot load application data");
 
 #endif
 
@@ -271,11 +271,11 @@ namespace Luha {
 		if (fout.good())
 		{
 			fout << out.c_str();
-			LH_CORE_INFO("Application data saved successfully\n");
+			LH_CORE_INFO("Application data saved successfully");
 		}
 		else
 		{
-			LH_CORE_ERROR("Error saving application data\n");
+			LH_CORE_ERROR("Error saving application data");
 		}
 #endif
 	}
@@ -470,21 +470,30 @@ namespace Luha {
 
 	void Application::RenderAdditionalWindows()
 	{
-		if (m_ShowImGuiDebbuger)
-			ImGui::ShowMetricsWindow(&m_ShowImGuiDebbuger);
+		if (m_ShowImGuiDebugger)
+		{
+			ImGui::ShowMetricsWindow(&m_ShowImGuiDebugger);
+
+		}
 
 		if (m_ShowImGuiStackTool)
+		{
 			ImGui::ShowStackToolWindow(&m_ShowImGuiStackTool);
+
+		}
 
 		if (m_ShowImGuiStyleTool)
 		{
 			ImGui::Begin("Dear ImGui Style Editor", &m_ShowImGuiStyleTool);
 			ImGui::ShowStyleEditor();
 			ImGui::End();
+
 		}
 
-		if (m_ShowImPlotDebbuger)
-			ImPlot::ShowMetricsWindow(&m_ShowImPlotDebbuger);
+		if (m_ShowImPlotDebugger)
+		{
+			ImPlot::ShowMetricsWindow(&m_ShowImPlotDebugger);
+		}
 		
 		if (m_ShowImPlotStyleTool)
 		{
@@ -650,25 +659,44 @@ namespace Luha {
 			ImGui::Separator();
 			if (ImGui::BeginMenu("Tools##MainMenuTools"))
 			{
-				if (ImGui::MenuItem("UI Debbuger##MainMenuTools-UIDebbuger", "", &m_ShowImGuiDebbuger)) {}
+				if (ImGui::MenuItem("UI Debugger##MainMenuTools-UIDebugger", "", &m_ShowImGuiDebugger))
+				{
+					if(m_ShowImGuiDebugger)
+						LH_CORE_TRACE("Added window: UI Debugger");
+				}
 				
 				ImGui::Separator();
-				if (ImGui::MenuItem("UI Stack tool##MainMenuTools-UIStack", "", &m_ShowImGuiStackTool)) {}
+				if (ImGui::MenuItem("UI Stack tool##MainMenuTools-UIStack", "", &m_ShowImGuiStackTool)) 
+				{
+					if (m_ShowImGuiStackTool)
+						LH_CORE_TRACE("Added window: UI Stack Tool");
+				}
 				
 				ImGui::Separator();
-				if (ImGui::MenuItem("UI Style tool##MainMenuTools-UIStyle", "", &m_ShowImGuiStyleTool)) {}
+				if (ImGui::MenuItem("UI Style tool##MainMenuTools-UIStyle", "", &m_ShowImGuiStyleTool))
+				{
+					if (m_ShowImGuiStyleTool)
+						LH_CORE_TRACE("Added window: UI Style Tool");
+				}
 				
 				ImGui::Separator();
-				if (ImGui::MenuItem("Plot Debbuger##MainMenuTools-PlotDebbuger", "", &m_ShowImPlotDebbuger)) {}
+				if (ImGui::MenuItem("Plot Debugger##MainMenuTools-PlotDebbuger", "", &m_ShowImPlotDebugger))
+				{
+					if (m_ShowImPlotDebugger)
+						LH_CORE_TRACE("Added window: Plot Debugger");
+				}
 				
 				ImGui::Separator();
-				if (ImGui::MenuItem("Plot Style tool##MainMenuTools-PlotStyle", "", &m_ShowImPlotStyleTool)) {}
+				if (ImGui::MenuItem("Plot Style tool##MainMenuTools-PlotStyle", "", &m_ShowImPlotStyleTool))
+				{
+					if (m_ShowImPlotStyleTool)
+						LH_CORE_TRACE("Added window: Plot Style Tool");
+				}
 
 				ImGui::EndMenu();
 			}
 			 
-			// Log
-
+			// Logs
 			if (ImGui::BeginMenu("Logs##MainMenuLogs"))
 			{
 				ImGui::Text("Log to:");
@@ -779,11 +807,9 @@ namespace Luha {
 						ImGui::EndCombo();
 					}
 				}
-
 			ImGui::EndMenu();
 		}
 			
-
 			// Exit
 			ImGui::Separator();
 			if (ImGui::MenuItem("Exit##MainMenuExit", "Alt+F4"))
@@ -801,12 +827,13 @@ namespace Luha {
 		io.Fonts->Clear();
 
 		std::string filePath = "";
+		char* font;
 		switch (m_AppSpec.Font)
 		{
-			case AppFont::Roboto:     filePath = "assets/fonts/Roboto-Regular.ttf";   break;
-			case AppFont::Montserrat: filePath = "assets/fonts/Montserrat-Regular.ttf"; break;
-			case AppFont::Oswald:     filePath = "assets/fonts/Oswald-Regular.ttf";   break;
-			case AppFont::OpenSans:   filePath = "assets/fonts/OpenSans-Regular.ttf";   break;
+			case AppFont::Roboto:     filePath = "assets/fonts/Roboto-Regular.ttf";     font = "Roboto-Regular";     break;
+			case AppFont::Montserrat: filePath = "assets/fonts/Montserrat-Regular.ttf"; font = "Montserrat-Regular"; break;
+			case AppFont::Oswald:     filePath = "assets/fonts/Oswald-Regular.ttf";     font = "Oswald-Regular";     break;
+			case AppFont::OpenSans:   filePath = "assets/fonts/OpenSans-Regular.ttf";   font = "OpenSans-Regular";   break;
 		}
 
 		std::filesystem::path path = std::filesystem::path(filePath);
@@ -815,11 +842,14 @@ namespace Luha {
 			LH_CORE_ERROR("Invalid font path");
 			io.Fonts->AddFontDefault();
 			m_Font = io.Fonts->Fonts[0];
+
+			LH_CORE_ERROR("Deafult font loaded, cannot apply font size");
 		}
 		else
 		{
 			m_Font = io.Fonts->AddFontFromFileTTF(filePath.c_str(), m_AppSpec.FontSize);
 			
+			LH_CORE_TRACE("Font \"{0}\" loaded", font);
 		}
 		
 		ImGui_ImplOpenGL3_CreateFontsTexture();
