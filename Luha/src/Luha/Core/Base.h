@@ -1,11 +1,11 @@
 #pragma once
 
 // Includes 
-#include "Core/PlatformDetection.h"
-#include "Core/Log.h"
-#include "Core/Assert.h"
+#include "Luha/Utils/PlatformDetection.h"
+#include "Luha/Core/Log.h"
+#include "Luha/Core/Assert.h"
 
-#include "Debug/Instrumentor.h"
+#include "Luha/Debug/Instrumentor.h"
 
 #include <memory>
 

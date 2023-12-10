@@ -1,14 +1,15 @@
 #include "lhpch.h"
-#include "Window.h"
+
+#include "Luha/Core/Window.h"
+#include "Luha/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 #include "glad/glad.h"
 
-#include "Application.h"
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+#include "Luha/Events/Event.h"
+#include "Luha/Events/ApplicationEvent.h"
+#include "Luha/Events/KeyEvent.h"
+#include "Luha/Events/MouseEvent.h"
 
 namespace Luha {
 

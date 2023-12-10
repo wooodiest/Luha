@@ -1,10 +1,10 @@
 #include "lhpch.h"
-#include "Log.h"
+
+#include "Luha/Core/Log.h"
+#include "Luha/Core/ApplicationSettings.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include <spdlog/sinks/basic_file_sink.h>
-
-#include "Core/ApplicationSettings.h"
 
 namespace Luha {
 

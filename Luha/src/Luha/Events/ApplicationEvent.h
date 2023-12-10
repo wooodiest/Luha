@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/Event.h"
+#include "Luha/Events/Event.h"
 
 namespace Luha {
 

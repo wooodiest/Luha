@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Events/Event.h"
+#include "Luha/Events/Event.h"
 
-#include "Core/Base.h"
+#include "Luha/Core/Base.h"
 
 struct GLFWwindow;
 

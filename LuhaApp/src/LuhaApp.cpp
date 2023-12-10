@@ -1,5 +1,5 @@
 #include <Luha.h>
-#include <Core/EntryPoint.h>
+#include <Luha/Core/EntryPoint.h>
 
 #include <ExampleLayer.h>
 

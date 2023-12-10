@@ -19,7 +19,8 @@
 #include <mutex>
 #include <sstream>
 #include <filesystem>
-#include "Core/ApplicationSettings.h"
+
+#include "Luha/Core/ApplicationSettings.h"
 
 namespace Luha {
 

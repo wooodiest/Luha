@@ -13,7 +13,7 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
-#include "Core/ApplicationSettings.h"
+#include "Luha/Core/ApplicationSettings.h"
 
 namespace Luha {
 

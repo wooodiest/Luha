@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Events/Event.h"
+#include "Luha/Events/Event.h"
 
-#include "Core/Timestep.h"
+#include "Luha/Utils/Timestep.h"
 
 namespace Luha {
 

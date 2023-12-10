@@ -1,5 +1,6 @@
 #include "lhpch.h"
-#include "Utils/Random.h"
+
+#include "Luha/Utils/Random.h"
 
 namespace Luha {
 

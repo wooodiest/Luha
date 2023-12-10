@@ -1,7 +1,7 @@
 #include "lhpch.h"
 
-#include "Core/Input.h"
-#include "Core/Application.h"
+#include "Luha/Core/Input.h"
+#include "Luha/Core/Application.h"
 
 #include "GLFW/glfw3.h"
 

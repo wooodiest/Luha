@@ -1,7 +1,8 @@
 #pragma once
 
 #include "lhpch.h"
-#include "Core/Base.h"
+
+#include "Luha/Core/Base.h"
 
 namespace Luha {
 

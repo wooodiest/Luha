@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+#include "Luha/Events/Event.h"
+#include "Luha/Events/ApplicationEvent.h"
+#include "Luha/Events/KeyEvent.h"
+#include "Luha/Events/MouseEvent.h"
 
-#include "Core/LayerStack.h"
-#include "Core/Window.h"
+#include "Luha/Core/LayerStack.h"
+#include "Luha/Core/Window.h"
 
-#include "Utils/Utils.h"
+#include "Luha/Utils/Utils.h"
 
 #include "glm/glm.hpp"
 #include "imgui.h"

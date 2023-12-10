@@ -13,6 +13,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Core/ApplicationSettings.h"
-#include "Core/Log.h"
-#include "Debug/Instrumentor.h"
+#include "Luha/Core/ApplicationSettings.h"
+#include "Luha/Core/Log.h"
+#include "Luha/Debug/Instrumentor.h"

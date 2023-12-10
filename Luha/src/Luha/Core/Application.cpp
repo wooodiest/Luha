@@ -1,10 +1,11 @@
 #include "lhpch.h"
 
-#include "Core/Application.h"
-#include "Core/Timestep.h"
-#include "Core/Input.h"
-#include "Utils/Time.h"
-#include "Utils/Random.h"
+#include "Luha/Core/Application.h"
+#include "Luha/Core/Input.h"
+
+#include "Luha/Utils/Timestep.h"
+#include "Luha/Utils/Time.h"
+#include "Luha/Utils/Random.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"

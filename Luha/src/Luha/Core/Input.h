@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Base.h"
-#include "Core/Codes.h"
+#include "Luha/Core/Base.h"
+#include "Luha/Core/Codes.h"
 
 namespace Luha {
 

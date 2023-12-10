@@ -1,7 +1,8 @@
 #include "lhpch.h"
-#include "Time.h"
 
-#include "Core/Application.h"
+#include "Luha/Utils/Time.h"
+
+#include "Luha/Core/Application.h"
 
 namespace Luha {
 
