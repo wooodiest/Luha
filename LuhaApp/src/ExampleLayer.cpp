@@ -27,6 +27,8 @@ namespace ExampleApp {
 		LH_PROFILE_FUNCTION();
 
 		Deserialize();
+
+		m_Image.LoadData("assets/img/opengl_logo.png", Luha::ImageFilter::Linear);
 	}
 
 	void ExampleLayer::OnDetach()
@@ -63,6 +65,14 @@ namespace ExampleApp {
 		ImGui::Text("Total frames: %d", Luha::Application::Get().GetWindow().GetFrameCount());
 		ImGui::InputText("Charcter", &m_Character);
 		ImGui::ColorEdit4("Color", glm::value_ptr(m_Color));
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Example Image");
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		ImGui::Image(m_Image.GetData(), viewportPanelSize);
+		ImGui::End();
+		ImGui::PopStyleVar();
+
 		ImGui::End();
 
 	}

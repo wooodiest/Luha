@@ -19,6 +19,7 @@
 #include "Luha/Utils/Timestep.h"
 #include "Luha/Utils/Utils.h"
 #include "Luha/Utils/Converter.h"
+#include "Luha/Utils/Image.h"
 
 #include "Luha/Yaml/Serializer.h"
 #include "Luha/ImGui/imgui_stdlib.h"

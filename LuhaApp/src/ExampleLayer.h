@@ -27,6 +27,7 @@ namespace ExampleApp {
 	private:
 		std::string m_Character = "";
 		glm::vec4 m_Color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		Luha::Image m_Image;
 
 	};
 

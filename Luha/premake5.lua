@@ -16,6 +16,8 @@ project "Luha"
 		"src/**.cpp",
 		"vendor/glm/glm/**.hpp",
 		"vendor/glm/glm/**.inl",
+		"vendor/stb_image/**.h",
+		"vendor/stb_image/**.cpp",
 		"vendor/implot/**.h"
 	}
 
@@ -34,7 +36,8 @@ project "Luha"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.ImPlot}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links 
