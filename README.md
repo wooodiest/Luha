@@ -3,11 +3,13 @@
 Luha is a simple application framework build with Dear ImGui. 
 
 ## Project includes
-- [Dear ImGui](https://github.com/ocornut/imgui)
-- [ImPlot](https://github.com/epezent/implot)
-- [GLFW](https://github.com/glfw/glfw)
-- [Glm](https://github.com/wooodiest/glm)
-- [Spdlog](https://github.com/gabime/spdlog)
+- [imgui](https://github.com/ocornut/imgui)
+- [imPlot](https://github.com/epezent/implot)
+- [glfp](https://github.com/glfw/glfw)
+- [glm](https://github.com/wooodiest/glm)
+- [spdlog](https://github.com/gabime/spdlog)
+- [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+- [stb-image](https://github.com/nothings/stb)
 
 ## Usage
 The easiest way to get started is to modify the LuhaApp project, which contains examples.
